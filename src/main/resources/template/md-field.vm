@@ -1,0 +1,6 @@
+$tile3 ${className}
+|**字段名称**|**类型**|**是否可空**|**描述/说明**|
+|---|---|---|---|
+#foreach($field in $fieldList)
+|${field.fieldName}|${field.fieldType}|${field.canNull}|${field.describe}|
+#end

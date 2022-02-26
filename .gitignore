@@ -1,0 +1,19 @@
+
+### gradle ###
+.gradle
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+
+### mac文件 ###
+.DS_Store

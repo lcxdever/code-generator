@@ -1,0 +1,37 @@
+# 1 接口说明
+```java
+class:
+
+${md.classNameFull}
+
+method:
+
+${md.methodTextFull}
+```
+# 2 接口参数
+$tile2 2.1 输入参数
+#foreach($param in ${md.parameters})
+$tile3 ${param.className}
+|**字段名称**|**类型**|**是否可空**|**描述/说明**|
+|---|---|---|---|
+#foreach($field in ${param.fields})
+|${field.fieldName}|${field.fieldType}|${field.canNull}|${field.describe}|
+#end
+#end
+$tile2 2.2 请求样例
+```json
+{}
+```
+$tile2 2.3 返回参数
+#foreach($param in ${md.returnTypes})
+$tile3 ${param.className}
+|**字段名称**|**类型**|**是否可空**|**描述/说明**|
+|---|---|---|---|
+#foreach($field in ${param.fields})
+|${field.fieldName}|${field.fieldType}|${field.canNull}|${field.describe}|
+#end
+#end
+$tile2 2.4 返回样例
+```json
+{}
+```

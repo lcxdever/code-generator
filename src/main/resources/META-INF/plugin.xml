@@ -1,0 +1,48 @@
+<idea-plugin>
+    <id>com.roc.code-generator</id>
+    <name>Code Generator</name>
+    <vendor email="roc@roc.com" url="http://www.roc.com">Roc</vendor>
+
+    <description><![CDATA[
+    Code Generator Code Generator Code Generator
+    ]]></description>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+
+    <extensionPoints>
+        <extensionPoint name="testFramework" interface="com.roc.generator.unittest.TestFramework" />
+        <extensionPoint name="mdAnnotationFormatter" interface="com.roc.generator.javadoc.MdAnnotationFormatter" />
+
+    </extensionPoints>
+
+    <extensions defaultExtensionNs="com.roc.code-generator">
+        <testFramework implementation="com.roc.generator.unittest.impl.Mockito"/>
+        <testFramework implementation="com.roc.generator.unittest.impl.PowerMock"/>
+
+        <mdAnnotationFormatter implementation="com.roc.generator.javadoc.impl.AnnoLengthRange"/>
+        <mdAnnotationFormatter implementation="com.roc.generator.javadoc.impl.AnnoMin"/>
+        <mdAnnotationFormatter implementation="com.roc.generator.javadoc.impl.AnnoMax"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup id="md_doc_generator_notification" displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <action id="roc_generate_unit_test" class="com.roc.generator.unittest.CreateTestAction" text="Unit Test"
+                description="Generate unit test">
+            <add-to-group group-id="GenerateGroup" anchor="first" />
+        </action>
+        <action id="roc_generate_filed_const" class="com.roc.generator.fieldconst.GenerateFieldConstAction"
+                text="Field Constants">
+            <add-to-group group-id="GenerateGroup" anchor="after" relative-to-action="roc_generate_unit_test"/>
+        </action>
+        <action id="roc_generate_md_doc" class="com.roc.generator.javadoc.MdDocGenerateAction"
+                text="Markdown Doc">
+            <add-to-group group-id="GenerateGroup" anchor="after" relative-to-action="roc_generate_filed_const"/>
+        </action>
+    </actions>
+</idea-plugin>

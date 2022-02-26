@@ -1,0 +1,54 @@
+#if ($hasAfter)
+import org.junit.After;
+#end
+#if ($hasBefore)
+import org.junit.Before;
+#end
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import ${testFramework.runnerClass.classNameFull};
+
+#foreach($import in $imports)
+import ${import};
+#end
+
+/**
+* {@link ${className}}的单元测试类
+*
+* @author ${user} on ${date}
+*/
+@RunWith(${testFramework.runnerClass.className}.class)
+public class ${testClassName} #if ($hasSuperClass) extends ${superClass.className} #end{
+
+@InjectMocks
+private ${className} ${instanceName};
+
+#foreach($field in $fieldList)
+    ${field.comment}
+@Mock
+private ${field.classInfo.classNameGenerics} ${field.fieldName};
+#end
+#if ($hasBefore)
+
+@Before
+public void before() {
+
+}
+#end
+#foreach($method in ${methodList})
+
+@Test
+public void test${method.methodNameUp}() {
+
+}
+#end
+#if ($hasAfter)
+
+@After
+public void after() {
+
+}
+#end
+}
