@@ -1,11 +1,13 @@
 <idea-plugin>
     <id>com.roc.code-generator</id>
     <name>Code Generator</name>
-    <vendor email="roc@roc.com" url="http://www.roc.com">Roc</vendor>
+    <vendor email="lcxdever@163.com" url="http://www.roc.com">Roc</vendor>
 
-    <description><![CDATA[
-    Code Generator Code Generator Code Generator
-    ]]></description>
+    <description>
+        <![CDATA[
+            用于提升编码效率，安装模板自动生成代码。现在支持了mockito单元测试；类、接口的markdown文档的自动生成。
+        ]]>
+    </description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -15,7 +17,6 @@
     <extensionPoints>
         <extensionPoint name="testFramework" interface="com.roc.generator.unittest.TestFramework" />
         <extensionPoint name="mdAnnotationFormatter" interface="com.roc.generator.javadoc.MdAnnotationFormatter" />
-
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.roc.code-generator">
