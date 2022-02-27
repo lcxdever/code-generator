@@ -2,6 +2,7 @@ package com.roc.generator.unittest;
 
 import com.intellij.CommonBundle;
 import com.intellij.codeInsight.CodeInsightBundle;
+import com.intellij.ide.BrowserUtil;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
@@ -9,6 +10,7 @@ import com.intellij.java.JavaBundle;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CustomShortcutSet;
+import com.intellij.openapi.application.IdeUrlTrackingParametersProvider;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -155,8 +157,14 @@ public class CreateTestDialog extends DialogWrapper {
     }
 
     @Override
-    protected String getHelpId() {
-        return "reference.dialogs.createTest";
+    protected void doHelpAction() {
+        BrowserUtil.browse(IdeUrlTrackingParametersProvider.getInstance().augmentUrl("https://github.com/lcxdever/code-generator/issues"));
+    }
+
+    @Override
+    @NotNull
+    protected Action[] createActions() {
+        return new Action[] {getOKAction(), getCancelAction(), getHelpAction()};
     }
 
     @Override
