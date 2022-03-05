@@ -1,33 +1,56 @@
 <idea-plugin>
     <id>com.roc.code-generator</id>
-    <name>Code Generator</name>
-    <vendor email="lcxdever@163.com" url="https://github.com/lcxdever/code-generator">Roc</vendor>
+    <name>Roc Code</name>
+    <vendor email="lcxdever@gmail.com" url="https://github.com/lcxdever/code-generator">Roc</vendor>
 
     <description>
         <![CDATA[
-            It is used to improve coding efficiency, automatically generate code or documents according to the predetermined template.
+            It is used to improve coding efficiency.
+            <br/>
+            Automatically generate code or documents according to the predetermined template.
+            </br><br>
+            Features：
+            </br>
             <ol>
-                <li>Generate Mockito or Powermock unit test templates</ li>
-                <li>Generate markdown documents according to Java interface methods or Java classes</ li>
+                <li>Generate Mockito or Powermock unit test templates</li>
+                <li>Generate Markdown documents according to Java interface methods or Java classes</li>
+            </ol>
+            Usage:
+            <br/>
+            <ol>
+                <li>Unit Test: open the class and right-click to select "Generate..." -> "Unit Test"</li>
+                <li>Markdown Doc: open the interface class, move the cursor to the method that needs to generate the document,
+                    <br/>
+                    and right-click to select "Generate..." -> "Markdown Doc"
+                </li>
             </ol>
             用于提升编码效率，按照预定模板自动生成代码或文档。
+            <br/><br>
+            特性:
+            <br/>
             <ol>
-                <li>实现了 Mockito、Powermock 单元测试模板生成；</li>
-                <li>实现了根据接口方法、类，生成 markdown 文档。</li>
+                <li>实现了 Mockito、Powermock 单元测试模板生成</li>
+                <li>实现了根据接口方法、类，生成 Markdown 文档</li>
+            </ol>
+            用法:
+            <br/>
+            <ol>
+                <li>单元测试：打开待测试的类，右键选择"Generate..." -> "Unit Test"</li>
+                <li>Markdown文档：打开接口类，将光标移动到需要生成文档的方法，右键选择"Generate..." -> "Markdown Doc"</li>
             </ol>
             动图展示（GIF）：
             <br/>
             生成单元测试模板（generate unit test）：
             <br/>
-            <img src="https://plugins.jetbrains.com/files/18692/screenshot_0634cc29-17ca-4b14-96b5-90a76702d674" />
+            <img src="https://plugins.jetbrains.com/files/18692/screenshot_0634cc29-17ca-4b14-96b5-90a76702d674"/>
             <br/>
             生成接口方法 markdown 文档（generate method markdown）：
             <br/>
-            <img src="https://plugins.jetbrains.com/files/18692/screenshot_46e47bfe-8cfb-4976-9100-9bbbed5fcd8f" />
+            <img src="https://plugins.jetbrains.com/files/18692/screenshot_46e47bfe-8cfb-4976-9100-9bbbed5fcd8f"/>
             <br/>
             生成类 markdown 文档（generate class markdown）：
             <br/>
-            <img src="https://plugins.jetbrains.com/files/18692/screenshot_8a8ca88a-85fb-4264-8e9a-a3be31b8377e" />
+            <img src="https://plugins.jetbrains.com/files/18692/screenshot_8a8ca88a-85fb-4264-8e9a-a3be31b8377e"/>
             <br/>
         ]]>
     </description>
