@@ -48,13 +48,22 @@
             <br/>
             <img src="https://plugins.jetbrains.com/files/18692/screenshot_46e47bfe-8cfb-4976-9100-9bbbed5fcd8f"/>
             <br/>
-            生成类 markdown 文档（generate class markdown）：
+            生成 Controller 类方法 markdown 文档（generate controller class markdown）：
             <br/>
-            <img src="https://plugins.jetbrains.com/files/18692/screenshot_8a8ca88a-85fb-4264-8e9a-a3be31b8377e"/>
+            <img src="https://plugins.jetbrains.com/files/18692/screenshot_79bf3ab2-ffe0-49bc-92aa-f3a5797ade11"/>
             <br/>
         ]]>
     </description>
 
+    <change-notes>
+        <![CDATA[
+            <h3>1.5-SNAPSHOT</h3>
+            <ul>
+                <li>support generate markdown according to controller class method</li>
+                <li>支持基于 controller 方法的 markdown 文档生成</li>
+            </ul>
+        ]]>
+    </change-notes>
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>

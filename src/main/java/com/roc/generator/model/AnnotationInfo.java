@@ -35,6 +35,18 @@ public class AnnotationInfo {
     private Map<String, String> attributes;
 
     /**
+     * 获取属性值
+     *
+     * @param attribute attribute
+     * @return {@link String}
+     */
+    public String getAttributeValue(String attribute) {
+        return attributes.get(attribute);
+    }
+
+    private AnnotationInfo() {}
+
+    /**
      * 根据 PsiAnnotation 类型创建
      *
      * @param psiAnnotation psiAnnotation
@@ -46,8 +58,15 @@ public class AnnotationInfo {
         annotationInfo.setText(psiAnnotation.getText());
         Map<String, String> attributes = new HashMap<>();
         for (PsiNameValuePair nameValuePair : psiAnnotation.getParameterList().getAttributes()) {
-            attributes.put(nameValuePair.getAttributeName(),
-                    Optional.ofNullable(nameValuePair.getValue()).map(PsiAnnotationMemberValue::getText).orElse(""));
+            PsiAnnotationMemberValue value = nameValuePair.getValue();
+            if (Objects.isNull(value)) {
+                continue;
+            }
+            String text = value.getText();
+            if (text.startsWith("\"") && text.endsWith("\"")) {
+                text = text.substring(1, text.length() - 1);
+            }
+            attributes.put(nameValuePair.getAttributeName(), text);
         }
         annotationInfo.setAttributes(attributes);
         return annotationInfo;

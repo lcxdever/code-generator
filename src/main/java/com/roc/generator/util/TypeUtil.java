@@ -22,6 +22,7 @@ public class TypeUtil {
             "double",
             "boolean",
             "char",
+            "void",
             "java.lang.Byte",
             "java.lang.Short",
             "java.lang.Integer",
@@ -32,6 +33,7 @@ public class TypeUtil {
             "java.lang.Character",
             "java.lang.String",
             "java.lang.Object",
+            "java.lang.Void",
             "java.util.Date",
             "java.time.LocalDate",
             "java.time.LocalDateTime",
@@ -40,6 +42,7 @@ public class TypeUtil {
             "java.util.List",
             "java.util.Map",
             "java.util.Set"
+
     );
 
     public static final Map<String, String> PRIMITIVE_BOX_MAP;

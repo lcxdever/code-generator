@@ -1,5 +1,6 @@
 package com.roc.generator.javadoc.model;
 
+import com.intellij.psi.PsiParameter;
 import com.roc.generator.util.MdAnnotationUtil;
 import com.roc.generator.model.FieldInfo;
 import com.roc.generator.util.MdUtil;
@@ -47,12 +48,7 @@ public class FieldMd {
         fieldMd.setFieldName(MdUtil.spChartReplace(fieldInfo.getFieldName()));
         fieldMd.setFieldType(MdUtil.spChartReplace(fieldInfo.getClassInfo().getClassNameGenerics()));
         fieldMd.setCanNull(MdAnnotationUtil.notNull(fieldInfo) ? "否" : "是");
-
-        if (CollectionUtils.isEmpty(fieldInfo.getAnnotations())) {
-            fieldMd.setDescribe(fieldInfo.getCommentSimple());
-        } else {
-            fieldMd.setDescribe(MdAnnotationUtil.getDescribeWithAnnotation(fieldInfo));
-        }
+        fieldMd.setDescribe(MdAnnotationUtil.getDescribeWithAnnotation(fieldInfo));
         fieldMd.setDescribe(MdUtil.spChartReplace(fieldMd.getDescribe()));
         return fieldMd;
     }

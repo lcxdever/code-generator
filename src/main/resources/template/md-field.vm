@@ -1,6 +1,6 @@
-$tile3 ${className}
+$tile3 ${md.className}
 |**字段名称**|**类型**|**是否可空**|**描述/说明**|
 |---|---|---|---|
-#foreach($field in $fieldList)
+#foreach($field in ${md.fields})
 |${field.fieldName}|${field.fieldType}|${field.canNull}|${field.describe}|
 #end

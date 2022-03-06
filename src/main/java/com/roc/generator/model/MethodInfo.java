@@ -44,6 +44,11 @@ public class MethodInfo {
     private String textFull;
 
     /**
+     * 原始注释信息
+     */
+    private PsiDocComment psiDocComment;
+
+    /**
      * 参数列表
      */
     private PsiParameterList parameterList;
@@ -53,14 +58,21 @@ public class MethodInfo {
      */
     private PsiType returnType;
 
+    /**
+     * PsiMethod
+     */
+    private PsiMethod psiMethod;
+
     public static MethodInfo fromPsiMethod(PsiMethod psiMethod) {
         MethodInfo methodInfo = new MethodInfo();
         methodInfo.setClassInfo(ClassInfo.fromClassNameText(((PsiClass)psiMethod.getParent()).getQualifiedName()));
         methodInfo.setMethodName(psiMethod.getName());
+        methodInfo.setPsiDocComment(psiMethod.getDocComment());
         methodInfo.setComment(Optional.ofNullable(psiMethod.getDocComment()).map(PsiDocComment::getText).orElse(""));
         methodInfo.setTextFull(psiMethod.getText());
         methodInfo.setReturnType(psiMethod.getReturnType());
         methodInfo.setParameterList(psiMethod.getParameterList());
+        methodInfo.setPsiMethod(psiMethod);
         return methodInfo;
     }
 }
