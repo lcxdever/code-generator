@@ -13,7 +13,7 @@ https://plugins.jetbrains.com/plugin/18692-roc-code
 其他说明：
 1. Markdown 文档中的示例数据生成，支持配置，选择"Preferences" -> "Roc Code" -> "Markdown Doc"，可以指定字段的默认值
 2. 上面的配置同样应用到 JSON 示例数据的生成
-4. 支持根据注解信息：@Length @Size @Range @Min @Max 在文档中自动追加描述信息
+3. 支持根据注解信息：@Length @Size @Range @Min @Max 在文档中自动追加描述信息
 
 更多说明及动图示例请参照：
 https://plugins.jetbrains.com/plugin/18692-roc-code
