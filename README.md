@@ -10,6 +10,7 @@ https://plugins.jetbrains.com/plugin/18692-roc-code
 3. 实现了根据 Controller 方法，生成 Markdown 文档
 4. 实现了根据 Java 类，生成 JSON 示例数据
 5. 实现了根据 Java 字段，生成静态常量字段
+
 其他说明：
 1. Markdown 文档中的示例数据生成，支持配置，选择"Preferences" -> "Roc Code" -> "Markdown Doc"，可以指定字段的默认值
 2. 上面的配置同样应用到 JSON 示例数据的生成
