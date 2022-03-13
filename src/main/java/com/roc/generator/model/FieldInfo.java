@@ -35,9 +35,9 @@ public class FieldInfo {
     private String comment;
 
     /**
-     * 类信息
+     * 类型信息
      */
-    private ClassInfo classInfo;
+    private TypeInfo typeInfo;
 
     /**
      * 注解信息
@@ -59,7 +59,7 @@ public class FieldInfo {
         FieldInfo field = new FieldInfo();
         field.setFieldName(psiField.getName());
         field.setComment(Optional.ofNullable(psiField.getDocComment()).map(PsiElement::getText).orElse(""));
-        field.setClassInfo(ClassInfo.fromClassNameText(psiField.getType().getCanonicalText()));
+        field.setTypeInfo(TypeInfo.fromPsiType(psiField.getType()));
         List<AnnotationInfo> annotations = new ArrayList<>();
         for (PsiAnnotation psiAnnotation : psiField.getAnnotations()) {
             annotations.add(AnnotationInfo.fromPsiAnnotation(psiAnnotation));

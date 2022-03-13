@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import ${testFramework.runnerClass.classNameFull};
+import ${testFramework.runnerClass.nameCanonical};
 
 #foreach($import in $imports)
 import ${import};
@@ -19,8 +19,8 @@ import ${import};
 *
 * @author ${user} on ${date}
 */
-@RunWith(${testFramework.runnerClass.className}.class)
-public class ${testClassName} #if ($hasSuperClass) extends ${superClass.className} #end{
+@RunWith(${testFramework.runnerClass.nameSimple}.class)
+public class ${testClassName} #if ($hasSuperClass) extends ${superClass.nameSimple} #end{
 
 @InjectMocks
 private ${className} ${instanceName};
@@ -28,7 +28,7 @@ private ${className} ${instanceName};
 #foreach($field in $fieldList)
     ${field.comment}
 @Mock
-private ${field.classInfo.classNameGenerics} ${field.fieldName};
+private ${field.typeInfo.nameGenericsSimple} ${field.fieldName};
 #end
 #if ($hasBefore)
 

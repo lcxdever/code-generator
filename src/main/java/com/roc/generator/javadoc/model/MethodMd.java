@@ -1,27 +1,23 @@
 package com.roc.generator.javadoc.model;
 
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiParameterList;
-import com.intellij.psi.PsiType;
-import com.roc.generator.model.ClassInfo;
+import com.intellij.psi.*;
+import com.roc.generator.model.TypeInfo;
 import com.roc.generator.model.FieldInfo;
 import com.roc.generator.model.MethodInfo;
-import com.roc.generator.util.FieldInfoUtil;
+import com.roc.generator.util.*;
 import com.roc.generator.util.FieldInfoUtil.StaticFinalFilter;
 import com.roc.generator.util.GenericsUtil;
-import com.roc.generator.util.MdUtil;
-import com.roc.generator.util.TypeUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
+ * 方法 markdown 描述
+ *
  * @author 鱼蛮 on 2022/2/20
  **/
 @Getter
@@ -32,7 +28,7 @@ public class MethodMd {
     /**
      * 全类名
      */
-    private String classNameFull;
+    private String classNameCanonical;
 
     /**
      * 全方法信息
@@ -55,41 +51,55 @@ public class MethodMd {
     private List<ClassMd> parameters;
 
     /**
+     * 返回的数据类型
+     */
+    private String returnTypeNameGenericsSimple;
+
+    /**
      * 返回类型信息，将返回参数涉及到的类打平到List做了描述
      */
     private List<ClassMd> returnTypes;
 
-    public MethodMd() {}
+    /**
+     * 返回参数示例
+     */
+    private String returnEg;
 
     public MethodMd(MethodInfo methodInfo) {
-        this(methodInfo, false);
+        PsiMethod psiMethod = methodInfo.getPsiMethod();
+        this.classNameCanonical = methodInfo.getTypeInfo().getNameCanonical();
+        this.methodTextFull = MdUtil.commentFormat(psiMethod.getText());
+        // 获取注释信息
+        this.commentSimple = PsiTool.getCommentSimple(psiMethod.getDocComment());
+        // 构建方法参数 MD 对象
+        this.parameter = MdUtil.getMethodParamMd(methodInfo);
+        // 请求参数列表
+        this.parameters = new ArrayList<>();
+        for (PsiParameter psiParameter : methodInfo.getParameters()) {
+            // 判断是合法的参数才进行添加
+            if (isValidParameter(psiParameter)) {
+                addGenerics(this.parameters, psiParameter.getType());
+            }
+        }
+
+        PsiType returnType = Objects.requireNonNull(psiMethod.getReturnType());
+
+        this.returnTypeNameGenericsSimple = MdUtil.spChartReplace(TypeInfo.fromPsiType(returnType).getNameGenericsSimple());
+        // 返回参数列表
+        this.returnTypes = new ArrayList<>();
+        addGenerics(this.returnTypes, returnType);
+        // 返回示例
+        this.returnEg = GsonUtil.prettyJson(JavaJsonUtil.genJsonFromPsiType(returnType));
     }
 
-    public MethodMd(MethodInfo methodInfo, boolean isController) {
-        this.classNameFull = methodInfo.getClassInfo().getClassNameFull();
-        this.methodTextFull = MdUtil.commentFormat(methodInfo.getTextFull());
-        // 获取注释信息
-        this.commentSimple = MdUtil.getCommentSimple(methodInfo.getPsiDocComment());
-        // 构建方法参数 MD 对象
-        this.parameter = MdUtil.getMethodParamMd(methodInfo, isController);
-        // 请求参数列表
-        List<ClassMd> params = new ArrayList<>();
-        this.parameters = params;
-        PsiParameterList parameterList = methodInfo.getParameterList();
-        for (int i = 0; i < parameterList.getParametersCount(); i++) {
-            PsiParameter psiParameter = parameterList.getParameter(i);
-            if (Objects.isNull(psiParameter)) {
-                continue;
-            }
-            if (isController && !MdUtil.isValidControllerParameter(psiParameter)) {
-                continue;
-            }
-            addGenerics(params, psiParameter.getType());
-        }
-        // 返回参数列表
-        List<ClassMd> returns = new ArrayList<>();
-        this.returnTypes = returns;
-        addGenerics(returns, methodInfo.getReturnType());
+    /**
+     * 是否合法参数
+     *
+     * @param psiParameter psiParameter
+     * @return {@link boolean}
+     */
+    protected boolean isValidParameter(PsiParameter psiParameter) {
+        return true;
     }
 
     /**
@@ -98,32 +108,28 @@ public class MethodMd {
      * @param params  params
      * @param psiType psiType
      */
-    private static void addGenerics(List<ClassMd> params, PsiType psiType) {
-        ClassInfo classInfo = ClassInfo.fromClassPsiType(psiType);
+    private void addGenerics(List<ClassMd> params, PsiType psiType) {
+        // 为了兼容 array 类型，使用 getDeepComponentType
+        TypeInfo typeInfo = TypeInfo.fromPsiType(psiType.getDeepComponentType());
         // java 基础类型不做描述
-        if (!TypeUtil.isJavaBaseType(classInfo.getClassNameFull())) {
-            List<FieldInfo> fields = FieldInfoUtil.getFieldInfoFromPsiType(psiType, new StaticFinalFilter());
-            ClassMd classMd = ClassMd.fromClassInfo(classInfo);
-            classMd.setFields(new ArrayList<>());
+        if (!MdUtil.ignoreType(typeInfo)) {
+            ClassMd classMd = ClassMd.fromClassInfo(typeInfo);
+            GenericsHelper genericsHelper = GenericsHelper.getInstance(psiType);
 
-            Map<String, PsiType> genericsMap = GenericsUtil.getGenericsMap(psiType);
+            List<FieldInfo> fields = FieldInfoUtil.getFieldInfoFromPsiType(psiType, new StaticFinalFilter());
             // 做字段转换，字段类型处理等
             for (FieldInfo fieldInfo : fields) {
                 FieldMd fieldMd = FieldMd.fromFieldInfo(fieldInfo);
-                fieldMd.setFieldTypeWithReplace(GenericsUtil.getGenericsRealType(genericsMap, fieldInfo.getPsiField().getType()));
+                fieldMd.setFieldTypeWithReplace(GenericsUtil.getGenericsRealType(genericsHelper, fieldInfo.getPsiField().getType()));
                 classMd.getFields().add(fieldMd);
             }
             params.add(classMd);
         }
+        // 如果是 class 类型，并且是泛型，将递归添加泛型类型
         if (psiType instanceof PsiClassType) {
-            PsiClassType psiClassType = (PsiClassType) psiType;
-            if (psiClassType.getParameters().length == 0) {
-                return;
-            }
-            for (PsiType type : psiClassType.getParameters()) {
+            for (PsiType type : ((PsiClassType) psiType).getParameters()) {
                 addGenerics(params, type);
             }
         }
     }
-
 }

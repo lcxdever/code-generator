@@ -6,7 +6,6 @@ import com.roc.generator.model.AnnotationInfo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * javax.validation.constraints.Min 格式化
@@ -20,7 +19,7 @@ public class AnnoMin implements MdAnnotationFormatter {
 
     @Override
     public String format(AnnotationInfo annotationInfo) {
-        String min = annotationInfo.getAttributes().get(VALUE);
+        String min = annotationInfo.getAttributeValue(VALUE);
         if (StringUtils.isBlank(min)) {
             return "";
         }

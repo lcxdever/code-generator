@@ -19,7 +19,7 @@ public class AnnoMax implements MdAnnotationFormatter {
 
     @Override
     public String format(AnnotationInfo annotationInfo) {
-        String max = annotationInfo.getAttributes().get(VALUE);
+        String max = annotationInfo.getAttributeValue(VALUE);
         if (StringUtils.isBlank(max)) {
             return "";
         }

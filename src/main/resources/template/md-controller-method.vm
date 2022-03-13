@@ -2,19 +2,19 @@
 $tile2 1.1 接口用途
 ${md.commentSimple}
 $tile2 1.2 接口地址
-接口名:${md.requestMapping}
-域名:参见通用信息说明
+**接口名：**${md.requestMapping}
+**域名：**参见通用信息说明
 $tile2 1.3 请求方式
 HTTP ${md.requestMethod} ${md.requestType}
 # 2 接口参数
-#if ($md.parameter.size() > 0)
+## controller method 中的参数描述
 $tile2 2.1 输入参数
-|**字段名称**|**类型**|**是否可空**|**描述/说明**|
+|**参数名称**|**类型**|**是否可空**|**描述/说明**|
 |---|---|---|---|
-#end
 #foreach($field in ${md.parameter})
 |${field.fieldName}|${field.fieldType}|${field.canNull}|${field.describe}|
 #end
+## 输入参数包含的类型的描述
 #foreach($param in ${md.parameters})
 $tile3 ${param.className}
 |**字段名称**|**类型**|**是否可空**|**描述/说明**|
@@ -25,13 +25,10 @@ $tile3 ${param.className}
 #end
 $tile2 2.2 请求样例
 ```json
-{}
+$!md.requestEg
 ```
 $tile2 2.3 返回参数
-#if($md.returnTypes.size()==0)
-|**字段名称**|**类型**|**是否可空**|**描述/说明**|
-|---|---|---|---|
-#end
+**返回数据类型：**$!md.returnTypeNameGenericsSimple
 #foreach($param in ${md.returnTypes})
 $tile3 ${param.className}
 |**字段名称**|**类型**|**是否可空**|**描述/说明**|
@@ -42,5 +39,5 @@ $tile3 ${param.className}
 #end
 $tile2 2.4 返回样例
 ```json
-{}
+$!md.returnEg
 ```

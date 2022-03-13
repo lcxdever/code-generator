@@ -1,7 +1,7 @@
 package com.roc.generator.unittest;
 
 import com.intellij.openapi.extensions.ExtensionPointName;
-import com.roc.generator.model.ClassInfo;
+import com.roc.generator.model.TypeInfo;
 
 import javax.swing.*;
 
@@ -31,8 +31,8 @@ public interface TestFramework {
     /**
      * 测试框架的  runnerClass
      *
-     * @return {@link ClassInfo}
+     * @return {@link TypeInfo}
      */
-    ClassInfo getRunnerClass();
+    TypeInfo getRunnerClass();
 
 }

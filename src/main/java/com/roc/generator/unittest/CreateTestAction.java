@@ -16,7 +16,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiJavaFileImpl;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.util.ResourceUtil;
-import com.roc.generator.model.ClassInfo;
+import com.roc.generator.model.TypeInfo;
 import com.roc.generator.model.FieldInfo;
 import com.roc.generator.model.MethodInfo;
 import org.apache.commons.compress.utils.Lists;
@@ -118,10 +118,10 @@ public class CreateTestAction extends AnAction {
                 FieldInfo templateField = new FieldInfo();
                 templateField.setFieldName(field.getName());
                 templateField.setComment(Optional.ofNullable(field.getDocComment()).map(PsiElement::getText).orElse(""));
-                ClassInfo classInfo = ClassInfo.fromClassNameText(field.getType().getCanonicalText());
-                templateField.setClassInfo(classInfo);
+                TypeInfo typeInfo = TypeInfo.fromPsiType(field.getType());
+                templateField.setTypeInfo(typeInfo);
                 fields.add(templateField);
-                imports.addAll(classInfo.getClassList());
+                imports.addAll(typeInfo.getClassList());
             }
         }
 
@@ -145,9 +145,9 @@ public class CreateTestAction extends AnAction {
             testClassName = className + "UnitTest";
         }
 
-        ClassInfo superClass = null;
+        TypeInfo superClass = null;
         if (StringUtils.isNoneBlank(dialog.getSuperClassName())) {
-            superClass = ClassInfo.fromClassNameText(dialog.getSuperClassName());
+            superClass = TypeInfo.fromNameGenericsCanonical(dialog.getSuperClassName());
             imports.addAll(superClass.getClassList());
         }
 

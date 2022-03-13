@@ -35,7 +35,7 @@ public class MdAnnotationUtil {
      */
     public static boolean notNull(FieldInfo fieldInfo) {
         for (AnnotationInfo annotationInfo : fieldInfo.getAnnotations()) {
-            if (NOT_NULL_ANNOTATION.contains(annotationInfo.getClassInfo().getClassNameFull())) {
+            if (NOT_NULL_ANNOTATION.contains(annotationInfo.getTypeInfo().getNameCanonical())) {
                 return true;
             }
         }
@@ -50,12 +50,15 @@ public class MdAnnotationUtil {
      */
     public static boolean notNull(PsiParameter psiParameter) {
         for (PsiAnnotation annotation : psiParameter.getAnnotations()) {
-            if (NOT_NULL_ANNOTATION.contains(AnnotationInfo.fromPsiAnnotation(annotation).getClassInfo().getClassNameFull())) {
+            if (NOT_NULL_ANNOTATION.contains(AnnotationInfo.fromPsiAnnotation(annotation).getTypeInfo().getNameCanonical())) {
                 return true;
             }
         }
         // 处理 spring 注解
         PsiAnnotation requestParam = psiParameter.getAnnotation(ControllerMethodMd.REQUEST_PARAM);
+        if (Objects.isNull(requestParam)) {
+            requestParam = psiParameter.getAnnotation(ControllerMethodMd.REQUEST_BODY);
+        }
         if (Objects.isNull(requestParam)) {
             requestParam = psiParameter.getAnnotation(ControllerMethodMd.PATH_VARIABLE);
         }
@@ -102,7 +105,7 @@ public class MdAnnotationUtil {
         // 获取支持的格式化工具，并执行格式化
         for (AnnotationInfo annotationInfo : annotations) {
             for (MdAnnotationFormatter formatter : MdAnnotationFormatter.EXTENSION_NAME.getExtensionList()) {
-                if (formatter.support().contains(annotationInfo.getClassInfo().getClassNameFull())) {
+                if (formatter.support().contains(annotationInfo.getTypeInfo().getNameCanonical())) {
                     sb.append(formatter.format(annotationInfo)).append(";");
                 }
             }

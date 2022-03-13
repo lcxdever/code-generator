@@ -1,15 +1,15 @@
 package com.roc.generator.javadoc.model;
 
-import com.intellij.psi.PsiParameter;
-import com.roc.generator.util.MdAnnotationUtil;
 import com.roc.generator.model.FieldInfo;
+import com.roc.generator.util.MdAnnotationUtil;
 import com.roc.generator.util.MdUtil;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.collections.CollectionUtils;
 
 /**
+ * 字段 markdown 描述
+ *
  * @author 鱼蛮 on 2022/2/19
  **/
 @Getter
@@ -46,7 +46,7 @@ public class FieldMd {
     public static FieldMd fromFieldInfo(FieldInfo fieldInfo) {
         FieldMd fieldMd = new FieldMd();
         fieldMd.setFieldName(MdUtil.spChartReplace(fieldInfo.getFieldName()));
-        fieldMd.setFieldType(MdUtil.spChartReplace(fieldInfo.getClassInfo().getClassNameGenerics()));
+        fieldMd.setFieldType(MdUtil.spChartReplace(fieldInfo.getTypeInfo().getNameGenericsSimple()));
         fieldMd.setCanNull(MdAnnotationUtil.notNull(fieldInfo) ? "否" : "是");
         fieldMd.setDescribe(MdAnnotationUtil.getDescribeWithAnnotation(fieldInfo));
         fieldMd.setDescribe(MdUtil.spChartReplace(fieldMd.getDescribe()));

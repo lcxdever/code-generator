@@ -1,14 +1,14 @@
 package com.roc.generator.util;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiParameter;
+import com.intellij.psi.util.PsiUtil;
 import com.roc.generator.javadoc.model.ControllerMethodMd;
 import com.roc.generator.javadoc.model.FieldMd;
 import com.roc.generator.model.AnnotationInfo;
-import com.roc.generator.model.ClassInfo;
+import com.roc.generator.model.TypeInfo;
 import com.roc.generator.model.MethodInfo;
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,9 +16,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * markdown 工具类
+ *
  * @author 鱼蛮 on 2022/2/21
  **/
 public class MdUtil {
+
+    public static final String BODY = "BODY";
 
     /**
      * 获取格式化后的注释
@@ -57,70 +61,32 @@ public class MdUtil {
     }
 
     /**
-     * 值获取文档的说明部分
-     *
-     * @param doc doc
-     * @return {@link String}
-     */
-    public static String getCommentSimple(PsiDocComment doc) {
-        if (Objects.isNull(doc)) {
-            return StringUtils.EMPTY;
-        }
-        // 获取方法描述
-        for (PsiElement element : doc.getDescriptionElements()) {
-            if (element instanceof PsiWhiteSpace) {
-                continue;
-            }
-            if (StringUtils.isNoneBlank(element.getText())) {
-                return element.getText();
-            }
-        }
-        return StringUtils.EMPTY;
-    }
-
-    /**
-     * 获取方法的参数 MD 文档
+     * 获取方法参数 MD 文档，由于是方法参数，只能从注释中获取字段描述信息
+     * 如果是 Controller 方法，需要考虑实际参数名
      *
      * @param methodInfo methodInfo
-     * @param isController 是否 controller
      * @return {@link List<FieldMd>}
      */
-    public static List<FieldMd> getMethodParamMd(MethodInfo methodInfo, boolean isController) {
-        // RequestBody 型请求参数，不需要显示 RequestBody 参数名
-        if (isController && isRequestBody(methodInfo)) {
-            return Lists.newArrayList();
-        }
-
-        Map<String, String> paramDocMap = Maps.newHashMap();
-        PsiDocComment doc = methodInfo.getPsiDocComment();
-        if (Objects.nonNull(doc)) {
-            // 获取参数映射，用户在 MD 中展示描述
-            for (PsiDocTag tag : doc.findTagsByName("param")) {
-                PsiElement[] elements = tag.getDataElements();
-                if (elements.length > 1) {
-                    paramDocMap.put(elements[0].getText(), elements[1].getText());
-                }
-            }
-        }
+    public static List<FieldMd> getMethodParamMd(MethodInfo methodInfo) {
+        // 判断是否 controller 类
+        boolean isController = isController(PsiUtil.getTopLevelClass(methodInfo.getPsiMethod()));
+        // 解析文档中对参数的描述
+        Map<String, String> paramDocMap = PsiTool.getCommentParamDocMap(methodInfo.getPsiMethod().getDocComment());
         // 解析参数信息，组装成 MD
-        PsiParameterList parameterList = methodInfo.getParameterList();
-        List<FieldMd> fields = Lists.newArrayListWithCapacity(parameterList.getParametersCount());
-        for (int i = 0; i < parameterList.getParametersCount(); i++) {
-            PsiParameter parameter = parameterList.getParameter(i);
-            if (Objects.isNull(parameter)) {
-                continue;
-            }
-            // 过滤掉 controller 里面的非前端传递参数
-            if (isController && !(isValidControllerParameter(parameter))) {
+        List<FieldMd> fields = Lists.newArrayList();
+        for (PsiParameter parameter : methodInfo.getParameters()) {
+            // 过滤掉 controller 中的无效参数
+            if (isController && !isValidControllerParma(parameter)) {
                 continue;
             }
             FieldMd fieldMd = new FieldMd();
-            fieldMd.setFieldName(parameter.getName());
+            // RequestBody 的参数没有字段名
+            fieldMd.setFieldName(parameter.hasAnnotation(ControllerMethodMd.REQUEST_BODY) ? "" : parameter.getName());
             // controller RequestParam 参数特殊处理
             if (isController) {
-                Optional.ofNullable(getSpringParamName(parameter)).ifPresent(fieldMd::setFieldName);
+                Optional.ofNullable(getControllerParamName(parameter)).ifPresent(fieldMd::setFieldName);
             }
-            fieldMd.setFieldType(MdUtil.spChartReplace(ClassInfo.fromClassPsiType(parameter.getType()).getClassNameGenerics()));
+            fieldMd.setFieldType(MdUtil.spChartReplace(TypeInfo.fromPsiType(parameter.getType()).getNameGenericsSimple()));
             fieldMd.setCanNull(MdAnnotationUtil.notNull(parameter) ? "否" : "是");
 
             String paramDoc = Optional.ofNullable(paramDocMap.get(parameter.getName())).orElse("");
@@ -132,12 +98,12 @@ public class MdUtil {
     }
 
     /**
-     * 获取 spring 参数的真实请求值
+     * 获取 spring controller 参数的真实请求值
      *
      * @param parameter parameter
      * @return {@link String}
      */
-    public static String getSpringParamName(PsiParameter parameter) {
+    public static String getControllerParamName(PsiParameter parameter) {
         PsiAnnotation requestParam = parameter.getAnnotation(ControllerMethodMd.REQUEST_PARAM);
         if (Objects.isNull(requestParam)) {
             requestParam = parameter.getAnnotation(ControllerMethodMd.PATH_VARIABLE);
@@ -152,33 +118,50 @@ public class MdUtil {
     }
 
     /**
-     * 是否 spring controller 有效参数
+     * PsiClass 是否 Controller
      *
-     * @param parameter parameter
+     * @param psiClass psiClass
      * @return {@link boolean}
      */
-    public static boolean isValidControllerParameter(PsiParameter parameter) {
-        return parameter.hasAnnotation(ControllerMethodMd.REQUEST_BODY)
-                || parameter.hasAnnotation(ControllerMethodMd.REQUEST_PARAM)
-                || parameter.hasAnnotation(ControllerMethodMd.PATH_VARIABLE);
+    public static boolean isController(PsiClass psiClass) {
+        Objects.requireNonNull(psiClass);
+        return psiClass.hasAnnotation(ControllerMethodMd.CONTROLLER)
+                || psiClass.hasAnnotation(ControllerMethodMd.REST_CONTROLLER);
     }
 
     /**
-     * 判断是否 RequestBody 方法
-     * @param methodInfo methodInfo
+     * 判断是否 Controller 的有效参数
+     * @param psiParameter psiParameter
      * @return {@link boolean}
      */
-    public static boolean isRequestBody(MethodInfo methodInfo) {
-        PsiParameterList parameterList = methodInfo.getParameterList();
-        for (int i = 0; i < parameterList.getParametersCount(); i++) {
-            PsiParameter parameter = parameterList.getParameter(i);
-            if (Objects.isNull(parameter)) {
-                continue;
-            }
+    public static boolean isValidControllerParma(PsiParameter psiParameter) {
+        return psiParameter.hasAnnotation(ControllerMethodMd.REQUEST_BODY)
+                || psiParameter.hasAnnotation(ControllerMethodMd.REQUEST_PARAM)
+                || psiParameter.hasAnnotation(ControllerMethodMd.PATH_VARIABLE);
+    }
+
+    /**
+     * 获取请求类型
+     *
+     * @param methodInfo methodInfo
+     * @return {@link String}
+     */
+    public static String getRequestType(MethodInfo methodInfo) {
+        for (PsiParameter parameter : methodInfo.getParameters()) {
             if (Objects.nonNull(parameter.getAnnotation(ControllerMethodMd.REQUEST_BODY))) {
-                return true;
+                return BODY;
             }
         }
-        return false;
+        return "";
+    }
+
+    /**
+     * 描述中需要忽略的类型
+     *
+     * @param typeInfo 类型信息
+     * @return {@link boolean}
+     */
+    public static boolean ignoreType(TypeInfo typeInfo) {
+        return TypeUtil.isJavaBaseType(typeInfo.getNameCanonical()) || TypeUtil.isCollection(typeInfo);
     }
 }

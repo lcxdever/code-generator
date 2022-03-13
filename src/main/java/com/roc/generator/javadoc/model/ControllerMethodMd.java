@@ -1,22 +1,28 @@
 package com.roc.generator.javadoc.model;
 
 import com.intellij.psi.*;
+import com.intellij.psi.util.PsiUtil;
 import com.roc.generator.model.AnnotationInfo;
 import com.roc.generator.model.MethodInfo;
+import com.roc.generator.util.GsonUtil;
+import com.roc.generator.util.JavaJsonUtil;
 import com.roc.generator.util.MdUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
+ * Controller 方法 markdown 描述
+ *
  * @author 鱼蛮 on 2022/2/20
  **/
 @Getter
 @Setter
 @ToString
-public class ControllerMethodMd extends MethodMd{
+public class ControllerMethodMd extends MethodMd {
 
     public static final String REQUEST_MAPPING = "org.springframework.web.bind.annotation.RequestMapping";
     public static final String POST_MAPPING = "org.springframework.web.bind.annotation.PostMapping";
@@ -24,14 +30,16 @@ public class ControllerMethodMd extends MethodMd{
     public static final String REQUEST_BODY = "org.springframework.web.bind.annotation.RequestBody";
     public static final String REQUEST_PARAM = "org.springframework.web.bind.annotation.RequestParam";
     public static final String PATH_VARIABLE = "org.springframework.web.bind.annotation.PathVariable";
+    public static final String CONTROLLER = "org.springframework.stereotype.Controller";
+    public static final String REST_CONTROLLER = "org.springframework.web.bind.annotation.RestController";
 
-    /***
+    /**
      * 请求地址
      */
     private String requestMapping;
 
     /**
-     * 请求的方法
+     * 请求的方式
      */
     private String requestMethod;
 
@@ -40,29 +48,25 @@ public class ControllerMethodMd extends MethodMd{
      */
     private String requestType;
 
-    public ControllerMethodMd() {}
+    /**
+     * 请求参数示例
+     */
+    private String requestEg;
 
     public ControllerMethodMd(MethodInfo methodInfo) {
-        super(methodInfo, true);
+        super(methodInfo);
 
         PsiMethod psiMethod = methodInfo.getPsiMethod();
-        PsiElement psiElement = psiMethod.getParent();
-        if (Objects.isNull(psiElement) || !(psiElement instanceof PsiClass)) {
-            return;
-        }
-        PsiClass ctcClass = (PsiClass)psiElement;
-        // 获取类上的注解
-        PsiAnnotation ctlRequestAnno = ctcClass.getAnnotation("org.springframework.web.bind.annotation.RequestMapping");
-        String uriPrefix = "";
-        if (Objects.nonNull(ctlRequestAnno)) {
-            AnnotationInfo cltAnnoInfo = AnnotationInfo.fromPsiAnnotation(ctlRequestAnno);
-            uriPrefix = cltAnnoInfo.getAttributeValue("value");
-        }
+        PsiClass ctcClass = Objects.requireNonNull(PsiUtil.getTopLevelClass(psiMethod));
+        // 获取类上 RequestMapping 的注解
+        PsiAnnotation ctlRequestAnno = ctcClass.getAnnotation(REQUEST_MAPPING);
+        String uriPrefix = Optional.ofNullable(ctlRequestAnno)
+                .map(AnnotationInfo::fromPsiAnnotation).map(e -> e.getAttributeValue("value"))
+                .orElse("");
         String uriSuffix = "";
         for (PsiAnnotation ann : psiMethod.getAnnotations()) {
             AnnotationInfo annInfo = AnnotationInfo.fromPsiAnnotation(ann);
-            String annName = annInfo.getClassInfo().getClassNameFull();
-            switch (annName) {
+            switch (annInfo.getTypeInfo().getNameCanonical()) {
                 case REQUEST_MAPPING:
                     String method = annInfo.getAttributeValue("method");
                     if (Objects.equals(method, "RequestMethod.POST")) {
@@ -87,8 +91,17 @@ public class ControllerMethodMd extends MethodMd{
         }
         requestMapping = uriPrefix + uriSuffix;
         // 获取请求类型
-        if (MdUtil.isRequestBody(methodInfo)) {
-            requestType = "BODY";
+        requestType = MdUtil.getRequestType(methodInfo);
+        // 如果参数中有 RequestBody 注解，自动生成示例
+        for (PsiParameter psiParameter : methodInfo.getParameters()) {
+            if (psiParameter.hasAnnotation(REQUEST_BODY)) {
+                this.requestEg = GsonUtil.prettyJson(JavaJsonUtil.genJsonFromPsiType(psiParameter.getType()));
+            }
         }
+    }
+
+    @Override
+    protected boolean isValidParameter(PsiParameter psiParameter) {
+        return MdUtil.isValidControllerParma(psiParameter);
     }
 }

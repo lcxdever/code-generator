@@ -62,6 +62,20 @@ public class FieldInfoUtil {
         }
     }
 
+    /**
+     * 是否 static 修饰的字段
+     *
+     * @param psiField psiField
+     * @return {@link boolean}
+     */
+    public static boolean isStatic(PsiField psiField) {
+        PsiModifierList modifierList = psiField.getModifierList();
+        if (Objects.isNull(modifierList)) {
+            return false;
+        }
+        return modifierList.hasModifierProperty(PsiModifier.STATIC);
+    }
+
     public interface FieldFilter {
 
         /**

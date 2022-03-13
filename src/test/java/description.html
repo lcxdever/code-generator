@@ -13,16 +13,23 @@ Features：
 </br>
 <ol>
     <li>Generate Mockito or Powermock unit test templates</li>
-    <li>Generate Markdown documents according to Java interface methods or Java classes</li>
+    <li>Generate markdown documents according to java interface methods</li>
+    <li>Generate markdown documents according to java controller methods</li>
+    <li>Generate JSON eg. data according to java class</li>
+    <li>Generate constants field according to java field</li>
 </ol>
 Usage:
 <br/>
 <ol>
     <li>Unit Test: open the class and right-click to select "Generate..." -> "Unit Test"</li>
-    <li>Markdown Doc: open the interface class, move the cursor to the method that needs to generate the document,
+    <li>Markdown Doc: open the interface or controller class,
+        <br/>
+        move the cursor to the method that needs to generate the document,
         <br/>
         and right-click to select "Generate..." -> "Markdown Doc"
     </li>
+    <li>JSON eg. Data: open the class and right-click to select "Generate..." -> "JSON"</li>
+    <li>Constants Field: open the class and right-click to select "Generate..." -> "Constants Field"</li>
 </ol>
 用于提升编码效率，按照预定模板自动生成代码或文档。
 <br/><br>
@@ -30,27 +37,52 @@ Usage:
 <br/>
 <ol>
     <li>实现了 Mockito、Powermock 单元测试模板生成</li>
-    <li>实现了根据接口方法、类，生成 Markdown 文档</li>
+    <li>实现了根据接口方法，生成 Markdown 文档</li>
+    <li>实现了根据 Controller 方法，生成 Markdown 文档</li>
+    <li>实现了根据 Java 类，生成 JSON 示例数据</li>
+    <li>实现了根据 Java 字段，生成静态常量字段</li>
 </ol>
+<br/>
+其他说明：
+<ul>
+    <li>Markdown 文档中的示例数据生成，支持配置，选择"Preferences" -> "Roc Code" -> "Markdown Doc"，
+        <br/>可以指定字段的默认值
+    </li>
+    <li>上面的配置同样应用到 JSON 示例数据的生成</li>
+    <li>支持根据注解信息：@Length @Size @Range @Min @Max 在文档中自动追加描述信息</li>
+</ul>
+<br/>
 用法:
 <br/>
 <ol>
     <li>单元测试：打开待测试的类，右键选择"Generate..." -> "Unit Test"</li>
-    <li>Markdown文档：打开接口类，将光标移动到需要生成文档的方法，右键选择"Generate..." -> "Markdown Doc"</li>
+    <li>Markdown文档：打开接口或者 Controller 类，将光标移动到需要生成文档的方法，
+        <br/>右键选择"Generate..." -> "Markdown Doc"
+    </li>
+    <li>JSON 示例数据：打开类，将光标移动到需要生成 JSON 示例数据的类，右键选择"Generate..." -> "JSON"</li>
+    <li>常量字段：打开类，将光标移动到需要生成常量字段的类，右键选择"Generate..." -> "Constants Field"</li>
 </ol>
 动图展示（GIF）：
 <br/>
 生成单元测试模板（generate unit test）：
 <br/>
-<img src="https://plugins.jetbrains.com/files/18692/screenshot_0634cc29-17ca-4b14-96b5-90a76702d674" width="700"/>
+<img src="https://plugins.jetbrains.com/files/18692/screenshot_0634cc29-17ca-4b14-96b5-90a76702d674"/>
 <br/>
 生成接口方法 markdown 文档（generate method markdown）：
 <br/>
-<img src="https://plugins.jetbrains.com/files/18692/screenshot_46e47bfe-8cfb-4976-9100-9bbbed5fcd8f" width="700"/>
+<img src="https://plugins.jetbrains.com/files/18692/screenshot_66396bdc-c686-4a81-869f-32e028b5119d"/>
 <br/>
-生成类 markdown 文档（generate class markdown）：
+生成 Controller 类方法 markdown 文档（generate controller class markdown）：
 <br/>
-<img src="https://plugins.jetbrains.com/files/18692/screenshot_8a8ca88a-85fb-4264-8e9a-a3be31b8377e" width="700"/>
+<img src="https://plugins.jetbrains.com/files/18692/screenshot_e963f656-80ee-448e-b73a-da6c6e1e5631"/>
+<br/>
+生成 java 类字段常量（generate constants according to class fields）：
+<br/>
+<img src="https://plugins.jetbrains.com/files/18692/screenshot_b53bbe02-20d0-4160-ae47-646630e433ed"/>
+<br/>
+生成 java 类 JSON 示例数据（generate JSON data according to java class）：
+<br/>
+<img src="https://plugins.jetbrains.com/files/18692/screenshot_4167e12a-f513-4958-bbda-916773f2ae24"/>
 <br/>
 </body>
 </html>

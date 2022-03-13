@@ -20,9 +20,9 @@ import java.util.*;
 public class AnnotationInfo {
 
     /**
-     * 类信息
+     * 类型信息
      */
-    private ClassInfo classInfo;
+    private TypeInfo typeInfo;
 
     /**
      * 注解文本
@@ -33,6 +33,11 @@ public class AnnotationInfo {
      * 属性
      */
     private Map<String, String> attributes;
+
+    /**
+     * PsiAnnotation
+     */
+    private PsiAnnotation psiAnnotation;
 
     /**
      * 获取属性值
@@ -54,7 +59,7 @@ public class AnnotationInfo {
      */
     public static AnnotationInfo fromPsiAnnotation(PsiAnnotation psiAnnotation) {
         AnnotationInfo annotationInfo = new AnnotationInfo();
-        annotationInfo.setClassInfo(ClassInfo.fromClassNameText(psiAnnotation.getQualifiedName()));
+        annotationInfo.setTypeInfo(TypeInfo.fromNameGenericsCanonical(psiAnnotation.getQualifiedName()));
         annotationInfo.setText(psiAnnotation.getText());
         Map<String, String> attributes = new HashMap<>();
         for (PsiNameValuePair nameValuePair : psiAnnotation.getParameterList().getAttributes()) {
@@ -69,6 +74,7 @@ public class AnnotationInfo {
             attributes.put(nameValuePair.getAttributeName(), text);
         }
         annotationInfo.setAttributes(attributes);
+        annotationInfo.setPsiAnnotation(psiAnnotation);
         return annotationInfo;
     }
 }

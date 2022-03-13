@@ -20,6 +20,7 @@ import com.roc.generator.model.FieldInfo;
 import com.roc.generator.model.MethodInfo;
 import com.roc.generator.util.FieldInfoUtil;
 import com.roc.generator.util.FieldInfoUtil.StaticFinalFilter;
+import com.roc.generator.util.MdUtil;
 import com.roc.generator.util.NotificationUtil;
 import lombok.SneakyThrows;
 
@@ -65,13 +66,13 @@ public class MdDocGenerateAction extends AnAction {
             mdStr = getInterfaceMdTextFromPsiMethod(selectedMethod);
         }
         // 选择的是 Controller 接口
-        else if(isController(selectedClass)) {
+        else if(MdUtil.isController(selectedClass)) {
             PsiMethod selectedMethod = PsiTreeUtil.getContextOfType(referenceAt, PsiMethod.class);
             mdStr = getControllerMdTextFromPsiMethod(selectedMethod);
         }
         // 选择的是普通类
         else {
-            // 值生成类的字段
+            // 只生成类的字段
             mdStr = getMdTextFromFields(selectedClass);
         }
 
@@ -80,11 +81,6 @@ public class MdDocGenerateAction extends AnAction {
 
         // 发送消息通知
         NotificationUtil.notifyInfo(project, "md_doc_generator_notification", "文档已经复制到黏贴板了,快去黏贴吧");
-    }
-
-    private boolean isController(PsiClass psiClass) {
-        return psiClass.hasAnnotation("org.springframework.stereotype.Controller")
-                || psiClass.hasAnnotation("org.springframework.web.bind.annotation.RestController");
     }
 
     /**

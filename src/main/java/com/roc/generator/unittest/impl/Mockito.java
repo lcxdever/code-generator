@@ -1,6 +1,6 @@
 package com.roc.generator.unittest.impl;
 
-import com.roc.generator.model.ClassInfo;
+import com.roc.generator.model.TypeInfo;
 import com.roc.generator.unittest.TestFramework;
 import com.roc.generator.PluginIcons;
 
@@ -24,7 +24,7 @@ public class Mockito implements TestFramework {
     }
 
     @Override
-    public ClassInfo getRunnerClass() {
-        return ClassInfo.fromClassNameText("org.mockito.junit.MockitoJUnitRunner");
+    public TypeInfo getRunnerClass() {
+        return TypeInfo.fromNameGenericsCanonical("org.mockito.junit.MockitoJUnitRunner");
     }
 }

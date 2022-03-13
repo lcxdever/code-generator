@@ -1,7 +1,7 @@
 package com.roc.generator.unittest.impl;
 
 import com.roc.generator.unittest.TestFramework;
-import com.roc.generator.model.ClassInfo;
+import com.roc.generator.model.TypeInfo;
 import com.roc.generator.PluginIcons;
 
 import javax.swing.*;
@@ -24,7 +24,7 @@ public class PowerMock implements TestFramework {
     }
 
     @Override
-    public ClassInfo getRunnerClass() {
-        return ClassInfo.fromClassNameText("org.powermock.modules.junit4.PowerMockRunner");
+    public TypeInfo getRunnerClass() {
+        return TypeInfo.fromNameGenericsCanonical("org.powermock.modules.junit4.PowerMockRunner");
     }
 }
