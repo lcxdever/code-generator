@@ -91,6 +91,13 @@
 
     <change-notes>
         <![CDATA[
+            <h3>1.8-SNAPSHOT</h3>
+            <ul>
+                <li>add pluginIcon </li>
+                <li>optimize the nested loop of generate JSON </li>
+                <li>增加了插件图标</li>
+                <li>优化了生产JSON过程中的嵌套循环</li>
+            </ul>
             <h3>1.7-SNAPSHOT</h3>
             <ul>
                 <li>modify support version -> 2020.1+</li>
