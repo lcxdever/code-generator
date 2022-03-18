@@ -1,81 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
-   width="80"
-   height="80"
-   version="1.1"
-   id="svg5"
-   inkscape:version="1.1.2 (b8e25be8, 2022-02-05)"
-   sodipodi:docname="abc.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <rect x="0" y="0" rx="10" ry="10"  width="80" height="80" fill="#1d8cff" />
+        width="80"
+        height="80"
+        version="1.1"
+        id="svg5"
+        xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" rx="10" ry="10" width="80" height="80" fill="#1d8cff"/>
 
-  <sodipodi:namedview
-     id="namedview7"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:document-units="mm"
-     showgrid="false"
-     units="px"
-     inkscape:zoom="0.77771465"
-     inkscape:cx="84.221122"
-     inkscape:cy="149.79787"
-     inkscape:window-width="1293"
-     inkscape:window-height="1075"
-     inkscape:window-x="1968"
-     inkscape:window-y="156"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="layer1"
-     inkscape:snap-text-baseline="true" />
-  <defs
-     id="defs2" />
-  <g
-     inkscape:label="图层 1"
-     inkscape:groupmode="layer"
-     id="layer1">
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:bold;font-size:45.5833px;line-height:1.25;font-family:Chalkduster;fill:#FFFFFF;fill-opacity:1;stroke:none;stroke-width:0.264583;-inkscape-font-specification:'Chalkduster, Normal';font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-       x="7.1443295"
-       y="9.7147331"
-       id="text2095"><tspan
-         sodipodi:role="line"
-         id="tspan2093"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Chalkduster;-inkscape-font-specification:'Chalkduster, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583;fill:#FFFFFF;fill-opacity:1"
-         x="0"
-         y="54.8147331">R</tspan>
-    </text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:bold;font-size:32.5833px;line-height:1.25;font-family:Chalkduster;fill:#FFFFFF;fill-opacity:1;stroke:none;stroke-width:0.264583;-inkscape-font-specification:'Chalkduster, Normal';font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-       x="2.0412371"
-       y="18.71134"
-       id="text4211"><tspan
-         sodipodi:role="line"
-         id="tspan4209"
-         style="font-style:normal;font-weight:bold;line-height:1.25;font-family:Chalkduster;fill:#FFFFFF;fill-opacity:1;stroke:none;stroke-width:0.264583;-inkscape-font-specification:'Chalkduster, Normal';font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-         x="30.4412371"
-         y="54.71134">O</tspan>
-    </text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:bold;font-size:32.5833px;line-height:1.25;font-family:Chalkduster;fill:#FFFFFF;fill-opacity:1;stroke:none;stroke-width:0.264583;-inkscape-font-specification:'Chalkduster, Normal';font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-       x="11.226803"
-       y="19.051546"
-       id="text5919"><tspan
-         sodipodi:role="line"
-         id="tspan5917"
-         style="stroke-width:0.264583;-inkscape-font-specification:'Chalkduster, Normal';font-family:Chalkduster;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:10.58330002px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#FFFFFF;fill-opacity:1"
-         x="53.226803"
-         y="54.851546">C</tspan>
-    </text>
-  </g>
+    <g id="layer1">
+        <text
+                style="font-style:normal;font-weight:bold;font-size:45.5833px;line-height:1.25;font-family:Chalkduster;fill:#FFFFFF;fill-opacity:1;"
+                x="0"
+                y="54.8147331"
+                id="text2095">R
+        </text>
+        <text
+                style="font-style:normal;font-weight:bold;font-size:32.5833px;line-height:1.25;font-family:Chalkduster;fill:#FFFFFF;fill-opacity:1;"
+                x="30.4412371"
+                y="54.71134"
+                id="text4211">O
+        </text>
+        <text
+                style="font-style:normal;font-weight:bold;font-size:32.5833px;line-height:1.25;font-family:Chalkduster;fill:#FFFFFF;fill-opacity:1;"
+                x="53.226803"
+                y="54.851546"
+                id="text5919">C
+        </text>
+    </g>
 </svg>
