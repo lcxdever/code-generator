@@ -1,11 +1,12 @@
 package com.roc.generator.javadoc.model;
 
+import com.google.common.collect.Lists;
 import com.intellij.psi.*;
 import com.roc.generator.model.TypeInfo;
 import com.roc.generator.model.FieldInfo;
 import com.roc.generator.model.MethodInfo;
 import com.roc.generator.util.*;
-import com.roc.generator.util.FieldInfoUtil.StaticFinalFilter;
+import com.roc.generator.util.FieldInfoUtil.StaticFilter;
 import com.roc.generator.util.GenericsUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -78,7 +79,7 @@ public class MethodMd {
         for (PsiParameter psiParameter : methodInfo.getParameters()) {
             // 判断是合法的参数才进行添加
             if (isValidParameter(psiParameter)) {
-                addGenerics(this.parameters, psiParameter.getType());
+                addGenerics(this.parameters, psiParameter.getType(), null);
             }
         }
 
@@ -87,7 +88,7 @@ public class MethodMd {
         this.returnTypeNameGenericsSimple = MdUtil.spChartReplace(TypeInfo.fromPsiType(returnType).getNameGenericsSimple());
         // 返回参数列表
         this.returnTypes = new ArrayList<>();
-        addGenerics(this.returnTypes, returnType);
+        addGenerics(this.returnTypes, returnType, null);
         // 返回示例
         this.returnEg = GsonUtil.prettyJson(JavaJsonUtil.genJsonFromPsiType(returnType));
     }
@@ -108,28 +109,55 @@ public class MethodMd {
      * @param params  params
      * @param psiType psiType
      */
-    private void addGenerics(List<ClassMd> params, PsiType psiType) {
-        // 为了兼容 array 类型，使用 getDeepComponentType
-        TypeInfo typeInfo = TypeInfo.fromPsiType(psiType.getDeepComponentType());
-        // java 基础类型不做描述
-        if (!MdUtil.ignoreType(typeInfo)) {
-            ClassMd classMd = ClassMd.fromClassInfo(typeInfo);
-            GenericsHelper genericsHelper = GenericsHelper.getInstance(psiType);
+    private void addGenerics(List<ClassMd> params, PsiType psiType, GenericsHelper parentGenericsHelper) {
+        // 为了兼容 array 类型，使用 getDeepComponentType，需要描述的基础类型
+        psiType = psiType.getDeepComponentType();
+        // 如果是泛型尝试获取真实类型
+        if (Objects.nonNull(parentGenericsHelper)) {
+            psiType = parentGenericsHelper.getRelType(psiType);
+        }
 
-            List<FieldInfo> fields = FieldInfoUtil.getFieldInfoFromPsiType(psiType, new StaticFinalFilter());
+        TypeInfo typeInfo = TypeInfo.fromPsiType(psiType);
+        List<FieldInfo> fields = Lists.newArrayList();
+
+        // 泛型帮助类
+        GenericsHelper genericsHelper = GenericsHelper.getInstance(psiType);
+        genericsHelper.union(parentGenericsHelper);
+
+        // java 基础类型、集合类型不需要做描述
+        if (!MdUtil.ignoreType(typeInfo) && !contains(params, typeInfo)) {
+            ClassMd classMd = ClassMd.fromClassInfo(typeInfo);
+            params.add(classMd);
+
+            fields = FieldInfoUtil.getFieldInfoFromPsiType(psiType, new StaticFilter());
             // 做字段转换，字段类型处理等
             for (FieldInfo fieldInfo : fields) {
                 FieldMd fieldMd = FieldMd.fromFieldInfo(fieldInfo);
                 fieldMd.setFieldTypeWithReplace(GenericsUtil.getGenericsRealType(genericsHelper, fieldInfo.getPsiField().getType()));
                 classMd.getFields().add(fieldMd);
             }
-            params.add(classMd);
         }
-        // 如果是 class 类型，并且是泛型，将递归添加泛型类型
+        // 递归添加字段类型描述
+        for (FieldInfo fieldInfo : fields) {
+            addGenerics(params, fieldInfo.getPsiField().getType(), genericsHelper);
+        }
+        // 如果是 class 泛型，如 List<OpUser>，将递归添加泛型类型
         if (psiType instanceof PsiClassType) {
             for (PsiType type : ((PsiClassType) psiType).getParameters()) {
-                addGenerics(params, type);
+                addGenerics(params, type, genericsHelper);
             }
         }
+
+    }
+
+    /**
+     * 是否已经包含的类型
+     *
+     * @param params   params
+     * @param typeInfo typeInfo
+     * @return {@link boolean}
+     */
+    private boolean contains(List<ClassMd> params, TypeInfo typeInfo) {
+        return params.stream().anyMatch(e -> Objects.equals(e.getClassName(), typeInfo.getNameSimple()));
     }
 }

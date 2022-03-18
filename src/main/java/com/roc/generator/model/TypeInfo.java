@@ -105,6 +105,7 @@ public class TypeInfo {
         TypeInfo typeInfo = new TypeInfo();
         typeInfo.setNameGenericsCanonical(name);
         typeInfo.setNameCanonical(StringUtils.substringBefore(name, "<"));
+        typeInfo.setNameCanonical(StringUtils.substringBefore(typeInfo.getNameCanonical(), "["));
         typeInfo.setPackageName(StringUtils.substringBeforeLast(typeInfo.getNameCanonical(), "."));
         typeInfo.setNameSimple(StringUtils.substringAfterLast(typeInfo.getNameCanonical(), "."));
         return typeInfo;

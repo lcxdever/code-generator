@@ -2,6 +2,8 @@
     <id>com.roc.code-generator</id>
     <name>Roc Code</name>
     <vendor email="lcxdever@gmail.com" url="https://github.com/lcxdever/code-generator">Roc</vendor>
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="201.0" />
 
     <description>
         <![CDATA[
@@ -89,6 +91,11 @@
 
     <change-notes>
         <![CDATA[
+            <h3>1.7-SNAPSHOT</h3>
+            <ul>
+                <li>modify support version -> 2020.1+</li>
+                <li>修改支持的版本号 -> 2020.1+</li>
+            </ul>
             <h3>1.6-SNAPSHOT</h3>
             <ul>
                 <li>optimize markdown document structure</li>
@@ -129,8 +136,10 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- 提示信息扩展-->
-        <notificationGroup id="md_doc_generator_notification" displayType="BALLOON"/>
-        <notificationGroup id="generator_json_notification" displayType="BALLOON"/>
+<!--        <notificationGroup id="md_doc_generator_notification" displayType="BALLOON"/>-->
+<!--        <notificationGroup id="generator_json_notification" displayType="BALLOON"/>-->
+        <notification.group id="md_doc_generator_notification"/>
+        <notification.group id="generator_json_notification"/>
 
         <!-- 配置信息扩展 -->
         <applicationService serviceImplementation="com.roc.generator.setting.PluginSettingState"/>

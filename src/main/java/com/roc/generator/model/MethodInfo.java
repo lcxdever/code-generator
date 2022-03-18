@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -50,7 +51,7 @@ public class MethodInfo {
      */
     private PsiMethod psiMethod;
 
-    public static MethodInfo fromPsiMethod(PsiMethod psiMethod) {
+    public static MethodInfo fromPsiMethod(@Nonnull PsiMethod psiMethod) {
         MethodInfo methodInfo = new MethodInfo();
         methodInfo.setTypeInfo(TypeInfo.fromPsiClass(Objects.requireNonNull(PsiUtil.getTopLevelClass(psiMethod))));
         methodInfo.setMethodName(psiMethod.getName());

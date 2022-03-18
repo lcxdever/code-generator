@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
+ * 插件配置最外层
+ *
  * @author 鱼蛮 on 2022/3/13
  **/
 public class RocCodeConfigurable implements Configurable {

@@ -17,8 +17,16 @@ import java.awt.*;
  * @author 鱼蛮 on 2022/3/12
  **/
 public class MdDocToolWindow {
+
+    /**
+     * 整体容器
+     */
     @Getter
     private JPanel container;
+
+    /**
+     * markdown 配置表格面板
+     */
     private JPanel markdownConfTablePanel;
 
     @Getter

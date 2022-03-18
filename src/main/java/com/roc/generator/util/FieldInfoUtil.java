@@ -48,17 +48,13 @@ public class FieldInfoUtil {
     }
 
     /**
-     * static 或者 final 修饰的字段进行过滤
+     * static 修饰的字段进行过滤
      */
-    public static class StaticFinalFilter implements FieldFilter {
+    public static class StaticFilter implements FieldFilter {
 
         @Override
         public boolean needFilter(PsiField psiField) {
-            PsiModifierList modifierList = psiField.getModifierList();
-            if (Objects.isNull(modifierList)) {
-                return false;
-            }
-            return modifierList.hasModifierProperty(PsiModifier.FINAL) || modifierList.hasModifierProperty(PsiModifier.STATIC);
+            return isStatic(psiField);
         }
     }
 

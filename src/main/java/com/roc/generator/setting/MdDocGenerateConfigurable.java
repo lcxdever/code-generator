@@ -38,9 +38,11 @@ public class MdDocGenerateConfigurable implements Configurable {
     public JComponent createComponent() {
         toolWindow = new MdDocToolWindow();
         PluginSettingState settings = PluginSettingState.getInstance();
+        // 持久值为空，直接返回 window
         if (MapUtils.isEmpty(settings.getFieldValueMap())) {
             return toolWindow.getContainer();
         }
+        // 持久值不为空，读取并填充表格行后再展示
         ListTableModel<FieldValueRow> tableModel = toolWindow.getBrowsersEditor().getModel();
         List<FieldValueRow> rows = settings.getFieldValueMap().entrySet().stream()
                 .map(e -> new FieldValueRow(e.getKey(), e.getValue()))
@@ -54,13 +56,16 @@ public class MdDocGenerateConfigurable implements Configurable {
         PluginSettingState settings = PluginSettingState.getInstance();
         Map<String, String> fieldValueMap = settings.getFieldValueMap();
         ListTableModel<FieldValueRow> tableModel = toolWindow.getBrowsersEditor().getModel();
+        // 行不一样时候肯定修改
         if (fieldValueMap.size() != tableModel.getRowCount()) {
             return true;
         }
         for (FieldValueRow row : tableModel.getItems()) {
+            // 持久值不包含的 key 肯定修改，有可能修改值为 null
             if (!fieldValueMap.containsKey(row.getFieldName())) {
                 return true;
             }
+            // key 相同，值不同的为修改
             if (!Objects.equals(fieldValueMap.get(row.getFieldName()), row.getDefaultValue())) {
                 return true;
             }
@@ -70,6 +75,7 @@ public class MdDocGenerateConfigurable implements Configurable {
 
     @Override
     public void apply() {
+        // 读取表格中的所有行，持久到 state
         PluginSettingState settings = PluginSettingState.getInstance();
         ListTableModel<FieldValueRow> tableModel = toolWindow.getBrowsersEditor().getModel();
         Map<String, String> map = new HashMap<>(tableModel.getRowCount());

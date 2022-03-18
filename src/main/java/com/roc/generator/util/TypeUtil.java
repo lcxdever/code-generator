@@ -1,7 +1,6 @@
 package com.roc.generator.util;
 
 import com.google.common.collect.Maps;
-import com.intellij.psi.PsiArrayType;
 import com.roc.generator.model.TypeInfo;
 import com.roc.generator.setting.PluginSettingState;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -22,6 +21,8 @@ public class TypeUtil {
     public static final Map<String, String> PRIMITIVE_BOX_MAP;
 
     public static final Map<String, Object> COLLECTION_TYPE;
+
+    public static final String TYPE_COLLECTION = "java.util.Collection";
 
     static {
         JAVA_BASE_TYPE = Maps.newHashMap();
@@ -51,6 +52,7 @@ public class TypeUtil {
         JAVA_BASE_TYPE.put("java.math.BigDecimal", new BigDecimal("9.9"));
         JAVA_BASE_TYPE.put("java.util.Map", new HashMap<>());
         JAVA_BASE_TYPE.put("java.util.HashMap", new HashMap<>());
+        JAVA_BASE_TYPE.put("com.alibaba.fastjson.JSONObject", new HashMap<>());
 
         PRIMITIVE_BOX_MAP = new HashMap<>();
         PRIMITIVE_BOX_MAP.put("byte", "java.lang.Byte");
@@ -128,7 +130,7 @@ public class TypeUtil {
      * @return {@link boolean}
      */
     public static boolean isCollection(TypeInfo typeInfo) {
-        if (Objects.nonNull(typeInfo.getPsiType()) && typeInfo.getPsiType() instanceof PsiArrayType) {
+        if (Objects.nonNull(typeInfo.getPsiType()) && PsiTool.isCollection(typeInfo.getPsiType())) {
             return true;
         }
         if (typeInfo.getNameGenericsCanonical().endsWith("[]")) {

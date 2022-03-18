@@ -8,6 +8,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.roc.generator.model.TypeInfo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -84,5 +85,27 @@ public class PsiTool {
         // 获取选择的类
         PsiElement referenceAt = psiFile.findElementAt(editor.getCaretModel().getOffset());
         return PsiTreeUtil.getContextOfType(referenceAt, PsiClass.class);
+    }
+
+    /**
+     * 判断类是否数组，及集合类型，会递归获取父类来判断
+     *
+     * @param psiType psiType
+     * @return {@link boolean}
+     */
+    public static boolean isCollection(PsiType psiType) {
+        if (psiType instanceof PsiArrayType) {
+            return true;
+        }
+        if (Objects.equals(TypeInfo.fromPsiType(psiType).getNameCanonical(), TypeUtil.TYPE_COLLECTION)) {
+            return true;
+        }
+        PsiType[] superTypes = psiType.getSuperTypes();
+        for (PsiType item : superTypes) {
+            if (isCollection(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

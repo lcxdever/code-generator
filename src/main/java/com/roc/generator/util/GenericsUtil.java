@@ -2,10 +2,11 @@ package com.roc.generator.util;
 
 import com.intellij.psi.PsiArrayType;
 import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiClassType.ClassResolveResult;
 import com.intellij.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiType;
-import com.intellij.psi.util.PsiUtil;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * 泛型工具类
@@ -28,10 +29,10 @@ public class GenericsUtil {
         }
         // 数组类型
         if (fieldType instanceof PsiArrayType) {
-            PsiType typeTmp = ((PsiArrayType) fieldType).getComponentType();
+            PsiType typeTmp = fieldType.getDeepComponentType();
             StringBuilder suffix = new StringBuilder("[]");
             while (typeTmp instanceof PsiArrayType) {
-                typeTmp = ((PsiArrayType) typeTmp).getComponentType();
+                typeTmp = typeTmp.getDeepComponentType();
                 suffix.append("[]");
             }
             return genericsHelper.getRelType(typeTmp).getPresentableText() + suffix;
@@ -44,11 +45,7 @@ public class GenericsUtil {
             return genericsHelper.getRelType(fieldType).getPresentableText();
         }
         // 泛型类型
-        StringBuilder sb = new StringBuilder(psiClassType.getClassName())
-                .append("<");
-        for (PsiType psiType : types) {
-            sb.append(genericsHelper.getRelType(psiType).getPresentableText());
-        }
-        return sb.append(">").toString();
+        return psiClassType.getClassName() +
+                "<" +Arrays.stream(types).map(genericsHelper::getRelType).map(PsiType::getPresentableText).collect(Collectors.joining(", ")) + ">";
     }
 }

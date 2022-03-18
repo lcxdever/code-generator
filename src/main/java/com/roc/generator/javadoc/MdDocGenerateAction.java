@@ -19,7 +19,7 @@ import com.roc.generator.javadoc.model.MethodMd;
 import com.roc.generator.model.FieldInfo;
 import com.roc.generator.model.MethodInfo;
 import com.roc.generator.util.FieldInfoUtil;
-import com.roc.generator.util.FieldInfoUtil.StaticFinalFilter;
+import com.roc.generator.util.FieldInfoUtil.StaticFilter;
 import com.roc.generator.util.MdUtil;
 import com.roc.generator.util.NotificationUtil;
 import lombok.SneakyThrows;
@@ -63,11 +63,17 @@ public class MdDocGenerateAction extends AnAction {
         // 选择的类如果是接口类，执行接口方法的生成
         if (selectedClass.isInterface()) {
             PsiMethod selectedMethod = PsiTreeUtil.getContextOfType(referenceAt, PsiMethod.class);
+            if (Objects.isNull(selectedMethod)) {
+                return;
+            }
             mdStr = getInterfaceMdTextFromPsiMethod(selectedMethod);
         }
         // 选择的是 Controller 接口
         else if(MdUtil.isController(selectedClass)) {
             PsiMethod selectedMethod = PsiTreeUtil.getContextOfType(referenceAt, PsiMethod.class);
+            if (Objects.isNull(selectedMethod)) {
+                return;
+            }
             mdStr = getControllerMdTextFromPsiMethod(selectedMethod);
         }
         // 选择的是普通类
@@ -97,6 +103,7 @@ public class MdDocGenerateAction extends AnAction {
 
     /**
      * 获取接口类方法的 markdown 文档
+     *
      * @param selectedMethod selectedMethod
      * @return {@link String}
      */
@@ -113,7 +120,7 @@ public class MdDocGenerateAction extends AnAction {
      * @return {@link String}
      */
     private String getMdTextFromFields(PsiClass psiClass) throws IOException {
-        List<FieldInfo> fields = FieldInfoUtil.getFieldInfoFromPsiClass(psiClass, new StaticFinalFilter());
+        List<FieldInfo> fields = FieldInfoUtil.getFieldInfoFromPsiClass(psiClass, new StaticFilter());
         List<FieldMd> fieldMds = fields.stream().map(FieldMd::fromFieldInfo).collect(Collectors.toList());
 
         ClassMd classMd = new ClassMd();

@@ -1,6 +1,6 @@
 package com.roc.generator.util;
 
-import com.intellij.notification.NotificationGroupManager;
+import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.project.Project;
 
@@ -19,7 +19,8 @@ public class NotificationUtil {
      * @param content content
      */
     public static void notifyInfo(@Nullable Project project, String group, String content) {
-        NotificationGroupManager.getInstance().getNotificationGroup(group)
+        NotificationGroup.balloonGroup(group)
+//        NotificationGroupManager.getInstance().getNotificationGroup(group)
                 .createNotification(content, NotificationType.INFORMATION)
                 .notify(project);
     }
