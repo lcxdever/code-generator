@@ -19,6 +19,11 @@ import java.util.Objects;
 public class GenerateJsonAction extends AnAction {
 
     @Override
+    public void update(@NotNull AnActionEvent e) {
+        PsiTool.setNormalClassVisible(e);
+    }
+
+    @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         PsiClass selectedClass = PsiTool.getSelectClass(e);
         if (Objects.isNull(selectedClass)) {

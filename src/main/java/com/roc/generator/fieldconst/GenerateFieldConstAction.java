@@ -12,6 +12,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.roc.generator.util.PsiTool;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,6 +32,11 @@ import java.util.stream.Collectors;
 public class GenerateFieldConstAction extends AnAction {
 
     @Override
+    public void update(@NotNull AnActionEvent e) {
+        PsiTool.setNormalClassVisible(e);
+    }
+
+    @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
         // 获取project
         Project project = anActionEvent.getData(CommonDataKeys.PROJECT);
@@ -45,7 +51,6 @@ public class GenerateFieldConstAction extends AnAction {
         PsiJavaFile psiJavaFile = (PsiJavaFile)psiFile;
         // 获取factory
         PsiElementFactory factory = PsiElementFactory.getInstance(project);
-
 
         // 找到所有类
         List<PsiClass> classElements = getAllClass(psiJavaFile);

@@ -3,6 +3,7 @@ package com.roc.generator.util;
 import com.google.common.collect.Maps;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
@@ -85,6 +86,22 @@ public class PsiTool {
         // 获取选择的类
         PsiElement referenceAt = psiFile.findElementAt(editor.getCaretModel().getOffset());
         return PsiTreeUtil.getContextOfType(referenceAt, PsiClass.class);
+    }
+
+    /**
+     * 设置选择的对象是普通 Class 时候才展现，对 interface、enum 不做展现
+     * @param e e
+     */
+    public static void setNormalClassVisible(AnActionEvent e) {
+        Presentation presentation = e.getPresentation();
+        PsiClass psiClass = PsiTool.getSelectClass(e);
+        if (Objects.isNull(psiClass)) {
+            presentation.setEnabledAndVisible(false);
+            return;
+        }
+        if (psiClass.isInterface() || psiClass.isEnum() || psiClass.isAnnotationType()) {
+            presentation.setEnabledAndVisible(false);
+        }
     }
 
     /**

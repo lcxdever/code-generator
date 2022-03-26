@@ -22,7 +22,9 @@ import com.roc.generator.util.FieldInfoUtil;
 import com.roc.generator.util.FieldInfoUtil.StaticFilter;
 import com.roc.generator.util.MdUtil;
 import com.roc.generator.util.NotificationUtil;
+import com.roc.generator.util.PsiTool;
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.*;
@@ -34,6 +36,12 @@ import java.util.stream.Collectors;
  * @author 鱼蛮 Date 2022/2/18
  */
 public class MdDocGenerateAction extends AnAction {
+
+    @Override
+    public void update(@NotNull AnActionEvent e) {
+        PsiClass psiClass = PsiTool.getSelectClass(e);
+        e.getPresentation().setEnabledAndVisible(Objects.nonNull(psiClass));
+    }
 
     @SneakyThrows
     @Override

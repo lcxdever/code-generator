@@ -19,6 +19,7 @@ import com.intellij.util.ResourceUtil;
 import com.roc.generator.model.TypeInfo;
 import com.roc.generator.model.FieldInfo;
 import com.roc.generator.model.MethodInfo;
+import com.roc.generator.util.PsiTool;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,11 @@ import java.util.stream.Collectors;
  * @author 鱼蛮 Date 2022/2/14
  */
 public class CreateTestAction extends AnAction {
+
+    @Override
+    public void update(@NotNull AnActionEvent e) {
+        PsiTool.setNormalClassVisible(e);
+    }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
