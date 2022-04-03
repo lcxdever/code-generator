@@ -87,11 +87,10 @@ public class MdUtil {
                 Optional.ofNullable(getControllerParamName(parameter)).ifPresent(fieldMd::setFieldName);
             }
             fieldMd.setFieldType(MdUtil.spChartReplace(TypeInfo.fromPsiType(parameter.getType()).getNameGenericsSimple()));
-            fieldMd.setCanNull(MdAnnotationUtil.notNull(parameter) ? "否" : "是");
+            fieldMd.setCanNull(MdAnnotationUtil.notNull(parameter) ? "N" : "Y");
 
             String paramDoc = Optional.ofNullable(paramDocMap.get(parameter.getName())).orElse("");
-            fieldMd.setDescribe(MdAnnotationUtil.getDescribeWithAnnotation(parameter, paramDoc));
-            fieldMd.setDescribe(MdUtil.spChartReplace(fieldMd.getDescribe()));
+            fieldMd.setDescribe(MdUtil.spChartReplace(MdAnnotationUtil.getDescribeWithAnnotation(parameter, paramDoc)));
             fields.add(fieldMd);
         }
         return fields;

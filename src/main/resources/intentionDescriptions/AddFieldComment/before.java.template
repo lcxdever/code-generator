@@ -1,0 +1,5 @@
+public class ValidationController {
+
+    private ValidationService validationService;
+
+}

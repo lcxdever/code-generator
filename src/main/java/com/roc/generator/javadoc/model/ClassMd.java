@@ -19,9 +19,9 @@ import java.util.List;
 public class ClassMd {
 
     /**
-     * 类名
+     * 简要类名
      */
-    private String className;
+    private String classNameSimple;
 
     /**
      * 字段信息
@@ -36,7 +36,7 @@ public class ClassMd {
      */
     public static ClassMd fromClassInfo(TypeInfo typeInfo) {
         ClassMd classMd = new ClassMd();
-        classMd.setClassName(typeInfo.getNameSimple());
+        classMd.setClassNameSimple(typeInfo.getNameSimple());
         classMd.setFields(new ArrayList<>());
         return classMd;
     }

@@ -1,44 +1,44 @@
 # 1 接口说明
-**接口用途：**${md.commentSimple}
+**接口用途：**${METHOD_COMMENT_SIMPLE}
 ```java
 class:
 
-${md.classNameCanonical}
+${CLASS_NAME_CANONICAL}
 
 method:
 
-${md.methodTextFull}
+${METHOD_TEXT_FULL}
 ```
 # 2 接口参数
-$tile2 2.1 输入参数
+#[[##]]# 2.1 输入参数
 |**参数名称**|**类型**|**是否可空**|**描述/说明**|
 |---|---|---|---|
-#foreach($field in ${md.parameter})
+#foreach($field in ${PARAMETER_TYPES})
 |${field.fieldName}|${field.fieldType}|${field.canNull}|${field.describe}|
 #end
-## 输入参数包含的类型的描述
-#foreach($param in ${md.parameters})
-$tile3 ${param.className}
+#foreach($param in ${PARAMETER_TYPE_DESCRIBE})
+#[[###]]# ${param.classNameSimple}
 |**字段名称**|**类型**|**是否可空**|**描述/说明**|
 |---|---|---|---|
 #foreach($field in ${param.fields})
 |${field.fieldName}|${field.fieldType}|${field.canNull}|${field.describe}|
 #end
 #end
-$tile2 2.2 请求样例
+#[[##]]# 2.2 输入样例
 ```json
+$!PARAMETER_EG
 ```
-$tile2 2.3 返回参数
-**返回数据类型：**$!md.returnTypeNameGenericsSimple
-#foreach($param in ${md.returnTypes})
-$tile3 ${param.className}
+#[[##]]# 2.3 返回参数
+**返回数据类型：**$!RETURN_TYPE_NAME_GENERICS_SIMPLE
+#foreach($param in ${RETURN_TYPE_DESCRIBE})
+#[[###]]# ${param.classNameSimple}
 |**字段名称**|**类型**|**是否可空**|**描述/说明**|
 |---|---|---|---|
 #foreach($field in ${param.fields})
 |${field.fieldName}|${field.fieldType}|${field.canNull}|${field.describe}|
 #end
 #end
-$tile2 2.4 返回样例
+#[[##]]# 2.4 返回样例
 ```json
-$!md.returnEg
+$!RETURN_EG
 ```

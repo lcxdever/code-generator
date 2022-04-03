@@ -15,5 +15,6 @@ public interface PluginIcons {
     Icon TEST_FRAMEWORK_MOCKITO = IconLoader.findIcon("/image/mockito.png", PluginIcons.class);
     /** powermock 测试框架图片 */
     Icon TEST_FRAMEWORK_POWERMOCK = IconLoader.findIcon("/image/powermock.png", PluginIcons.class);
-
+    /** File and Code Template 处的 Icon */
+    Icon FILE_TEMPLATE_ICON = IconLoader.findIcon("/image/file-template.svg", PluginIcons.class);
 }

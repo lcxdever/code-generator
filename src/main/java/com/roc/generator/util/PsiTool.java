@@ -8,10 +8,12 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.psi.javadoc.PsiDocToken;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.roc.generator.model.TypeInfo;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
@@ -28,20 +30,18 @@ public class PsiTool {
      * @param doc doc
      * @return {@link String}
      */
-    public static String getCommentSimple(PsiDocComment doc) {
+    public static String[] getCommentSimple(PsiDocComment doc) {
         if (Objects.isNull(doc)) {
-            return StringUtils.EMPTY;
+            return new String[]{};
         }
         // 获取方法描述
-        for (PsiElement element : doc.getDescriptionElements()) {
-            if (element instanceof PsiWhiteSpace) {
-                continue;
-            }
-            if (StringUtils.isNoneBlank(element.getText())) {
-                return element.getText();
-            }
-        }
-        return StringUtils.EMPTY;
+        return Arrays.stream(doc.getDescriptionElements())
+                .filter(e -> e instanceof PsiDocToken && ((PsiDocToken)e).getTokenType() == JavaDocTokenType.DOC_COMMENT_DATA)
+                .map(PsiElement::getText)
+                .map(String::trim)
+                .filter(StringUtils::isNoneBlank)
+                .filter(e -> !StringTool.isAllStar(e))
+                .toArray(String[]::new);
     }
 
     /**

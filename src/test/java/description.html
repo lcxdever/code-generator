@@ -7,74 +7,92 @@
 <body>
 It is used to improve coding efficiency.
 <br/>
-Automatically generate code or documents according to the predetermined template.
-</br><br>
-Features：
-</br>
-<ol>
-    <li>Generate Mockito or Powermock unit test templates</li>
-    <li>Generate markdown documents according to java interface methods</li>
-    <li>Generate markdown documents according to java controller methods</li>
-    <li>Generate JSON eg. data according to java class</li>
-    <li>Generate constants field according to java field</li>
-</ol>
-Usage:
+Provide an ability to generate markdown Doc according to java interface method or controller method.
 <br/>
+Features:
 <ol>
-    <li>Unit Test: open the class and right-click to select "Generate..." -> "Unit Test"</li>
+    <li>Generate markdown Doc base on java interface method or controller method</li>
+    <li>Generate Mockito or Powermock unit test templates</li>
+    <li>Generate JSON e.g. data base on java class</li>
+    <li>Generate constants field base on java field</li>
+    <li>Automatically generate field comments according to the comments of field types</li>
+</ol>
+Other:
+<ul>
+    <li>The template of the markdown Doc support custom configuration  -->
+        <br/>
+        Preferences | Editor | File and Code Templates | Other | Roc Code
+        <br/>
+        If the parameters provided cannot meet your requirements，you can <a href="https://github.com/lcxdever/code-generator/issues">contact author</a> to add
+    </li>
+    <li>The sample data in the markdown Doc support to config the default value of field  -->
+        <br/>
+        Preferences | Other Settings | Roc Code | Markdown Doc
+    </li>
+    <li>The above configuration is also applied to the generation of JSON sample data</li>
+    <li>Automatically append description to the Doc, support annotation：@Length @Size @Range @Min @Max </li>
+</ul>
+Usage:
+<ol>
     <li>Markdown Doc: open the interface or controller class,
         <br/>
         move the cursor to the method that needs to generate the document,
         <br/>
-        and right-click to select "Generate..." -> "Markdown Doc"
+        and then right-click to select "Generate..." -> "Markdown Doc"
     </li>
+    <li>Unit Test: open the class and right-click to select "Generate..." -> "Unit Test"</li>
     <li>JSON eg. Data: open the class and right-click to select "Generate..." -> "JSON"</li>
     <li>Constants Field: open the class and right-click to select "Generate..." -> "Constants Field"</li>
+    <li>Generate comments：choose field，press "Alt + Enter", and choose "Add comment to the field"</li>
 </ol>
-用于提升编码效率，按照预定模板自动生成代码或文档。
-<br/><br>
-特性:
+用于提升编码效率，主要提供了根据 Java 接口方法或者 controller 方法生成 markdown Doc 的能力
 <br/>
+特性:
 <ol>
+    <li>实现了基于 Java 接口方法或者 Controller 方法，生成 Markdown 文档</li>
     <li>实现了 Mockito、Powermock 单元测试模板生成</li>
-    <li>实现了根据接口方法，生成 Markdown 文档</li>
-    <li>实现了根据 Controller 方法，生成 Markdown 文档</li>
     <li>实现了根据 Java 类，生成 JSON 示例数据</li>
     <li>实现了根据 Java 字段，生成静态常量字段</li>
+    <li>可以根据字段类型的注释，自动生成字段注释</li>
 </ol>
-<br/>
 其他说明：
 <ul>
-    <li>Markdown 文档中的示例数据生成，支持配置，选择"Preferences" -> "Roc Code" -> "Markdown Doc"，
-        <br/>可以指定字段的默认值
+    <li>Markdown 文档的模板支持配置  -->
+        <br/>
+        Preferences | Editor | File and Code Templates | Other | Roc Code
+        <br/>
+        如果提供的参数无法满足需求，可以<a href="https://github.com/lcxdever/code-generator/issues">联系作者</a>添加
+    </li>
+    <li>Markdown 文档中的示例数据，支持配置字段的默认值  -->
+        <br/>
+        Preferences | Other Settings | Roc Code | Markdown Doc
     </li>
     <li>上面的配置同样应用到 JSON 示例数据的生成</li>
     <li>支持根据注解信息：@Length @Size @Range @Min @Max 在文档中自动追加描述信息</li>
 </ul>
-<br/>
 用法:
-<br/>
 <ol>
-    <li>单元测试：打开待测试的类，右键选择"Generate..." -> "Unit Test"</li>
     <li>Markdown文档：打开接口或者 Controller 类，将光标移动到需要生成文档的方法，
         <br/>右键选择"Generate..." -> "Markdown Doc"
     </li>
+    <li>单元测试：打开待测试的类，右键选择"Generate..." -> "Unit Test"</li>
     <li>JSON 示例数据：打开类，将光标移动到需要生成 JSON 示例数据的类，右键选择"Generate..." -> "JSON"</li>
     <li>常量字段：打开类，将光标移动到需要生成常量字段的类，右键选择"Generate..." -> "Constants Field"</li>
+    <li>生成注释：选择字段，按下"Alt + Enter"，并选择 "Add comment to the field"</li>
 </ol>
 动图展示（GIF）：
 <br/>
-生成单元测试模板（generate unit test）：
+生成 Controller 类方法 markdown 文档（generate controller class markdown）：
 <br/>
-<img src="https://plugins.jetbrains.com/files/18692/screenshot_0634cc29-17ca-4b14-96b5-90a76702d674"/>
+<img src="https://plugins.jetbrains.com/files/18692/screenshot_e963f656-80ee-448e-b73a-da6c6e1e5631"/>
 <br/>
 生成接口方法 markdown 文档（generate method markdown）：
 <br/>
 <img src="https://plugins.jetbrains.com/files/18692/screenshot_66396bdc-c686-4a81-869f-32e028b5119d"/>
 <br/>
-生成 Controller 类方法 markdown 文档（generate controller class markdown）：
+生成单元测试模板（generate unit test）：
 <br/>
-<img src="https://plugins.jetbrains.com/files/18692/screenshot_e963f656-80ee-448e-b73a-da6c6e1e5631"/>
+<img src="https://plugins.jetbrains.com/files/18692/screenshot_0634cc29-17ca-4b14-96b5-90a76702d674"/>
 <br/>
 生成 java 类字段常量（generate constants according to class fields）：
 <br/>

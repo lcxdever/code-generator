@@ -36,7 +36,7 @@ public class ControllerMethodMd extends MethodMd {
     /**
      * 请求地址
      */
-    private String requestMapping;
+    private String requestUri;
 
     /**
      * 请求的方式
@@ -47,11 +47,6 @@ public class ControllerMethodMd extends MethodMd {
      * 请求类型
      */
     private String requestType;
-
-    /**
-     * 请求参数示例
-     */
-    private String requestEg;
 
     public ControllerMethodMd(MethodInfo methodInfo) {
         super(methodInfo);
@@ -89,13 +84,13 @@ public class ControllerMethodMd extends MethodMd {
                 default:
             }
         }
-        requestMapping = uriPrefix + uriSuffix;
+        requestUri = uriPrefix + uriSuffix;
         // 获取请求类型
         requestType = MdUtil.getRequestType(methodInfo);
         // 如果参数中有 RequestBody 注解，自动生成示例
         for (PsiParameter psiParameter : methodInfo.getParameters()) {
             if (psiParameter.hasAnnotation(REQUEST_BODY)) {
-                this.requestEg = GsonUtil.prettyJson(JavaJsonUtil.genJsonFromPsiType(psiParameter.getType()));
+                this.setParameterEg(GsonUtil.prettyJson(JavaJsonUtil.genJsonFromPsiType(psiParameter.getType())));
             }
         }
     }

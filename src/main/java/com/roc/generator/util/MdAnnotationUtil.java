@@ -24,8 +24,10 @@ public class MdAnnotationUtil {
     public static final Set<String> NOT_NULL_ANNOTATION = Sets.newHashSet(
             "javax.validation.constraints.NotBlank",
             "javax.validation.constraints.NotEmpty",
-            "javax.validation.constraints.NotNull"
-            );
+            "javax.validation.constraints.NotNull",
+            "org.hibernate.validator.constraints.NotBlank",
+            "org.hibernate.validator.constraints.NotEmpty"
+    );
 
     /**
      * 字段是否非空

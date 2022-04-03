@@ -1,0 +1,56 @@
+<html xmlns="http://www.w3.org/1999/html">
+<body style="font-size: 9px">
+Predefined variables will take the following values:
+<br/>
+<table width="100%" border="0" cellpadding="5" cellspacing="0" style="border-collapse: collapse;table-layout: fixed;" bordercolor="#111111">
+    <tr>
+        <td width="350">${REQUEST_URI}</td>
+        <td>the request URI</td>
+    </tr>
+    <tr>
+        <td>${REQUEST_METHOD}</td>
+        <td>the request method, e.g. GET POST</td>
+    </tr>
+    <tr>
+        <td>${REQUEST_TYPE}</td>
+        <td>the request type, e.g. BODY</td>
+    </tr>
+    <tr>
+        <td>${CLASS_NAME_CANONICAL}</td>
+        <td>the canonical class name of the class, which the method is located</td>
+    </tr>
+    <tr>
+        <td>${METHOD_TEXT_FULL}</td>
+        <td>the full text of the method, contains comment, method info etc. </td>
+    </tr>
+    <tr>
+        <td>${METHOD_COMMENT_SIMPLE}</td>
+        <td>only the description part of comment</td>
+    </tr>
+    <tr>
+        <td>${PARAMETER_TYPES}</td>
+        <td>a list of parameter, Type is "FieldMd", include fields: fieldName, fieldType, canNull, describe</td>
+    </tr>
+    <tr>
+        <td>${PARAMETER_TYPE_DESCRIBE}</td>
+        <td>a list of parameter descriptions, Type is "ClassMd", include fields: classNameSimple, fields. the "fields" field is a list, just like the variable "${PARAMETER_TYPES}"</td>
+    </tr>
+    <tr>
+        <td>${PARAMETER_EG}</td>
+        <td>the example of parameters</td>
+    </tr>
+    <tr>
+        <td>${RETURN_TYPE_NAME_GENERICS_SIMPLE}</td>
+        <td>the simple name of return type with generics</td>
+    </tr>
+    <tr>
+        <td>${RETURN_TYPE_DESCRIBE}</td>
+        <td>a list of return type descriptions, just like the variable "${PARAMETER_TYPE_DESCRIBE}"</td>
+    </tr>
+    <tr>
+        <td>${RETURN_EG}</td>
+        <td>the example of return</td>
+    </tr>
+</table>
+</body>
+</html>

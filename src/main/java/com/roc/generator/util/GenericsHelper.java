@@ -34,7 +34,7 @@ public class GenericsHelper {
      * 获取泛型类型与实际类型的映射
      *
      * @param psiType psiType
-     * @return {@link Map <String, PsiType >}
+     * @return {@link Map <String,PsiType>}
      */
     public static GenericsHelper getInstance(PsiType psiType) {
         Map<String, PsiType>  genericsMap = Maps.newHashMap();

@@ -32,34 +32,39 @@ public class MethodMd {
     private String classNameCanonical;
 
     /**
-     * 全方法信息
+     * 方法全部信息
      */
     private String methodTextFull;
 
     /**
-     * 简要注释信息
+     * 方法简要注释信息
      */
-    private String commentSimple;
+    private String methodCommentSimple;
 
     /**
-     * 参数描述信息
+     * 参数类型信息
      */
-    private List<FieldMd> parameter;
+    private List<FieldMd> parameterTypes;
 
     /**
-     * 参数类型信息，将参数涉及到的类打平到List做了描述
+     * 参数类型描述信息，将参数涉及到的类打平到 List 做了描述
      */
-    private List<ClassMd> parameters;
+    private List<ClassMd> parameterTypeDescribe;
 
     /**
-     * 返回的数据类型
+     * 参数示例
+     */
+    private String parameterEg;
+
+    /**
+     * 返回数据类型，包含泛型
      */
     private String returnTypeNameGenericsSimple;
 
     /**
-     * 返回类型信息，将返回参数涉及到的类打平到List做了描述
+     * 返回数据类型描述信息，将返回参数涉及到的类打平到 List 做了描述
      */
-    private List<ClassMd> returnTypes;
+    private List<ClassMd> returnTypeDescribe;
 
     /**
      * 返回参数示例
@@ -71,24 +76,24 @@ public class MethodMd {
         this.classNameCanonical = methodInfo.getTypeInfo().getNameCanonical();
         this.methodTextFull = MdUtil.commentFormat(psiMethod.getText());
         // 获取注释信息
-        this.commentSimple = PsiTool.getCommentSimple(psiMethod.getDocComment());
+        this.methodCommentSimple = String.join("\n", PsiTool.getCommentSimple(psiMethod.getDocComment()));
         // 构建方法参数 MD 对象
-        this.parameter = MdUtil.getMethodParamMd(methodInfo);
+        this.parameterTypes = MdUtil.getMethodParamMd(methodInfo);
         // 请求参数列表
-        this.parameters = new ArrayList<>();
+        this.parameterTypeDescribe = new ArrayList<>();
         for (PsiParameter psiParameter : methodInfo.getParameters()) {
             // 判断是合法的参数才进行添加
             if (isValidParameter(psiParameter)) {
-                addGenerics(this.parameters, psiParameter.getType(), null);
+                addGenerics(this.parameterTypeDescribe, psiParameter.getType(), null);
             }
         }
 
         PsiType returnType = Objects.requireNonNull(psiMethod.getReturnType());
-
+        // 返回参数类型
         this.returnTypeNameGenericsSimple = MdUtil.spChartReplace(TypeInfo.fromPsiType(returnType).getNameGenericsSimple());
         // 返回参数列表
-        this.returnTypes = new ArrayList<>();
-        addGenerics(this.returnTypes, returnType, null);
+        this.returnTypeDescribe = new ArrayList<>();
+        addGenerics(this.returnTypeDescribe, returnType, null);
         // 返回示例
         this.returnEg = GsonUtil.prettyJson(JavaJsonUtil.genJsonFromPsiType(returnType));
     }
@@ -158,6 +163,6 @@ public class MethodMd {
      * @return {@link boolean}
      */
     private boolean contains(List<ClassMd> params, TypeInfo typeInfo) {
-        return params.stream().anyMatch(e -> Objects.equals(e.getClassName(), typeInfo.getNameSimple()));
+        return params.stream().anyMatch(e -> Objects.equals(e.getClassNameSimple(), typeInfo.getNameSimple()));
     }
 }

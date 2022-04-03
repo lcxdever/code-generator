@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 /**
+ * java 类型工具
+ *
  * @author 鱼蛮 on 2022/2/21
  **/
 public class TypeUtil {

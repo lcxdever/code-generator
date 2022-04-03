@@ -1,8 +1,9 @@
 package com.roc.generator.unittest.model;
 
 import com.intellij.testFramework.fixtures.*;
-import com.roc.generator.model.TypeInfo;
-import com.roc.generator.util.GsonUtil;
+import com.roc.generator.javadoc.model.ControllerMethodMd;
+import com.roc.generator.util.ReflectTool;
+import com.roc.generator.util.StringTool;
 import org.junit.Test;
 
 import java.util.Date;
@@ -18,10 +19,15 @@ public class MainTest {
     public void test() {
 //        TypeInfo typeInfo = TypeInfo.fromNameGenericsCanonical("java.List<c.Create<a.Test, c.Just>>");
 //        System.out.println(typeInfo.getNameGenericsSimple());
-        Tmp tmp = new Tmp();
-        tmp.setDate(new Date());
-        System.out.println(GsonUtil.prettyJson(tmp));
+//        Tmp tmp = new Tmp();
+//        tmp.setDate(new Date());
+//        System.out.println(GsonUtil.prettyJson(tmp));
+
+        ReflectTool.getClassFields(ControllerMethodMd.class)
+                .forEach(e -> System.out.println(StringTool.camelToUnderline(e.getName())));
     }
+
+
 
     public static class Tmp {
         private Date date;

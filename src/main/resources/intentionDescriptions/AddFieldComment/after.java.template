@@ -1,0 +1,6 @@
+public class ValidationController {
+
+    <spot>/** 验证服务 */</spot>
+    private ValidationService validationService;
+
+}

@@ -1,7 +1,8 @@
 package com.roc.generator.javadoc;
 
 import com.google.common.collect.Maps;
-import com.intellij.ide.fileTemplates.impl.CustomFileTemplate;
+import com.intellij.ide.fileTemplates.FileTemplate;
+import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -10,7 +11,6 @@ import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ResourceUtil;
 import com.intellij.util.ui.TextTransferable;
 import com.roc.generator.javadoc.model.ClassMd;
 import com.roc.generator.javadoc.model.ControllerMethodMd;
@@ -18,16 +18,16 @@ import com.roc.generator.javadoc.model.FieldMd;
 import com.roc.generator.javadoc.model.MethodMd;
 import com.roc.generator.model.FieldInfo;
 import com.roc.generator.model.MethodInfo;
-import com.roc.generator.util.FieldInfoUtil;
+import com.roc.generator.util.*;
 import com.roc.generator.util.FieldInfoUtil.StaticFilter;
-import com.roc.generator.util.MdUtil;
-import com.roc.generator.util.NotificationUtil;
-import com.roc.generator.util.PsiTool;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -103,10 +103,10 @@ public class MdDocGenerateAction extends AnAction {
      * @param selectedMethod selectedMethod
      * @return {@link String}
      */
-    private String getControllerMdTextFromPsiMethod(PsiMethod selectedMethod) throws IOException {
+    private String getControllerMdTextFromPsiMethod(PsiMethod selectedMethod) throws IOException, IllegalAccessException {
         MethodInfo methodInfo = MethodInfo.fromPsiMethod(selectedMethod);
         ControllerMethodMd controllerMethodMd = new ControllerMethodMd(methodInfo);
-        return getMdTextFromMethodMd(controllerMethodMd, "md-controller-method.vm");
+        return getMdTextFromMethodMd(controllerMethodMd, FileTemplateGroupFactory.MD_CONTROLLER_METHOD_DOC,  selectedMethod.getProject());
     }
 
     /**
@@ -115,10 +115,10 @@ public class MdDocGenerateAction extends AnAction {
      * @param selectedMethod selectedMethod
      * @return {@link String}
      */
-    private String getInterfaceMdTextFromPsiMethod(PsiMethod selectedMethod) throws IOException {
+    private String getInterfaceMdTextFromPsiMethod(PsiMethod selectedMethod) throws IOException, IllegalAccessException {
         MethodInfo methodInfo = MethodInfo.fromPsiMethod(selectedMethod);
         MethodMd methodMd = new MethodMd(methodInfo);
-        return getMdTextFromMethodMd(methodMd, "md-interface-method.vm");
+        return getMdTextFromMethodMd(methodMd, FileTemplateGroupFactory.MD_INTERFACE_METHOD_DOC, selectedMethod.getProject());
     }
 
     /**
@@ -127,29 +127,27 @@ public class MdDocGenerateAction extends AnAction {
      * @param psiClass psiClass
      * @return {@link String}
      */
-    private String getMdTextFromFields(PsiClass psiClass) throws IOException {
+    private String getMdTextFromFields(PsiClass psiClass) throws IOException, IllegalAccessException {
         List<FieldInfo> fields = FieldInfoUtil.getFieldInfoFromPsiClass(psiClass, new StaticFilter());
         List<FieldMd> fieldMds = fields.stream().map(FieldMd::fromFieldInfo).collect(Collectors.toList());
 
         ClassMd classMd = new ClassMd();
-        classMd.setClassName(psiClass.getName());
+        classMd.setClassNameSimple(psiClass.getName());
         classMd.setFields(fieldMds);
 
-        return getMdTextFromMethodMd(classMd, "md-field.vm");
+        return getMdTextFromMethodMd(classMd, FileTemplateGroupFactory.MD_DOMAIN_DOC, psiClass.getProject());
     }
 
-    private String getMdTextFromMethodMd(Object md, String vm) throws IOException {
-        // 加载模板并执行替换
-        String text = ResourceUtil.loadText(ResourceUtil.getResource(this.getClass().getClassLoader(), "template", vm));
-        CustomFileTemplate template = new CustomFileTemplate("java", "java");
-        template.setText(text);
-        Map<String, Object> map = Maps.newHashMap();
-        map.put("md", md);
-        map.put("tile2", "##");
-        map.put("tile3", "###");
-        map.put("tile4", "####");
+    private String getMdTextFromMethodMd(Object md, String templateName, Project project) throws IOException, IllegalAccessException {
 
-        return template.getText(map);
+        FileTemplate fileTemplate = FileTemplateManager.getInstance(project).getJ2eeTemplate(templateName);
+
+        Map<String, Object> map = Maps.newHashMap();
+        for (Field field : ReflectTool.getClassFields(md.getClass())) {
+            field.setAccessible(true);
+            map.put(StringTool.camelToUnderline(field.getName()), field.get(md));
+        }
+        return fileTemplate.getText(map);
     }
 
 }

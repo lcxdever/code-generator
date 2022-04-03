@@ -47,7 +47,7 @@ public class FieldMd {
         FieldMd fieldMd = new FieldMd();
         fieldMd.setFieldName(MdUtil.spChartReplace(fieldInfo.getFieldName()));
         fieldMd.setFieldType(MdUtil.spChartReplace(fieldInfo.getTypeInfo().getNameGenericsSimple()));
-        fieldMd.setCanNull(MdAnnotationUtil.notNull(fieldInfo) ? "否" : "是");
+        fieldMd.setCanNull(MdAnnotationUtil.notNull(fieldInfo) ? "N" : "Y");
         fieldMd.setDescribe(MdAnnotationUtil.getDescribeWithAnnotation(fieldInfo));
         fieldMd.setDescribe(MdUtil.spChartReplace(fieldMd.getDescribe()));
         return fieldMd;
