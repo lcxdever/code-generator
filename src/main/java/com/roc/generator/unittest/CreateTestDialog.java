@@ -112,7 +112,7 @@ public class CreateTestDialog extends DialogWrapper {
         init();
     }
 
-    protected String suggestTestClassName(PsiClass targetClass) {
+    public static String suggestTestClassName(PsiClass targetClass) {
         JavaCodeStyleSettings customSettings = JavaCodeStyleSettings.getInstance(targetClass.getContainingFile());
         String prefix = customSettings.TEST_NAME_PREFIX;
         String suffix = customSettings.TEST_NAME_SUFFIX;

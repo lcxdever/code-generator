@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>com.roc.code-generator</id>
-    <name>Roc Code</name>
+    <name>Roc Code Generator</name>
     <vendor email="lcxdever@gmail.com" url="https://github.com/lcxdever/code-generator">Roc</vendor>
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="201.0" />
@@ -15,9 +15,9 @@
             <ol>
                 <li>Generate markdown Doc base on java interface method or controller method</li>
                 <li>Generate Mockito or Powermock unit test templates</li>
-                <li>Generate JSON e.g. data base on java class</li>
+                <li>Generate JSON sample data base on java class</li>
                 <li>Generate constants field base on java field</li>
-                <li>Automatically generate field comments according to the comments of field types</li>
+                <li>Automatically generate field comments according to the comments of field type</li>
             </ol>
             Other:
             <ul>
@@ -43,7 +43,7 @@
                     and then right-click to select "Generate..." -> "Markdown Doc"
                 </li>
                 <li>Unit Test: open the class and right-click to select "Generate..." -> "Unit Test"</li>
-                <li>JSON eg. Data: open the class and right-click to select "Generate..." -> "JSON"</li>
+                <li>JSON Sample Data: open the class and right-click to select "Generate..." -> "JSON"</li>
                 <li>Constants Field: open the class and right-click to select "Generate..." -> "Constants Field"</li>
                 <li>Generate comments：choose field，press "Alt + Enter", and choose "Add comment to the field"</li>
             </ol>
@@ -109,6 +109,16 @@
 
     <change-notes>
         <![CDATA[
+            <h3>1.12</h3>
+            <ul>
+                <li>optimize the generation of UnitTest, append test method generation for existing unit test classes</li>
+                <li>优化了单元测试的生成，增加了对已存在测试类进行追加测试方法生成</li>
+            </ul>
+            <h3>1.11</h3>
+            <ul>
+                <li>modify plugin name</li>
+                <li>修改了插件名称</li>
+            </ul>
             <h3>1.10</h3>
             <ul>
                 <li>optimize the generation of markdown Doc, support custom templates</li>
@@ -136,8 +146,8 @@
             <h3>1.6-SNAPSHOT</h3>
             <ul>
                 <li>optimize markdown document structure</li>
-                <li>increase the generation of eg. data</li>
-                <li>increase JSON eg. data according to java class</li>
+                <li>increase the generation of sample data</li>
+                <li>increase JSON sample data according to java class</li>
                 <li>优化了 Markdown 文档的输出结构</li>
                 <li>增加了 Markdown 文档示例数据的生成</li>
                 <li>增加了基于 Java 类的 JSON 示例数据生成</li>

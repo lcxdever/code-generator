@@ -8,18 +8,21 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.module.Module;
+import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiJavaFileImpl;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.util.ResourceUtil;
-import com.roc.generator.model.TypeInfo;
 import com.roc.generator.model.FieldInfo;
 import com.roc.generator.model.MethodInfo;
+import com.roc.generator.model.TypeInfo;
 import com.roc.generator.util.PsiTool;
+import com.roc.generator.util.StringTool;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -59,18 +62,26 @@ public class CreateTestAction extends AnAction {
         PsiJavaFile psiJavaFile = (PsiJavaFile)psiFile;
         PsiDirectory srcDir = psiJavaFile.getContainingDirectory();
         PsiPackage srcPackage = JavaDirectoryService.getInstance().getPackage(srcDir);
-        final Module srcModule = ModuleUtilCore.findModuleForPsiElement(psiJavaFile);
 
-        // 展示界面
+        Editor editor = e.getDataContext().getData(CommonDataKeys.EDITOR);
+        if (editor == null) {
+            return;
+        }
+
+        // 是否只需要创建测试方法
+        if (createTestMethodOnly(project, psiJavaFile, editor)) {
+            return;
+        }
+
+        // 展示 Form 界面
         CreateTestDialog dialog = new CreateTestDialog(project, "Create Unit Test",
-                psiJavaFile.getClasses()[0], srcPackage, srcModule);
+                psiJavaFile.getClasses()[0], srcPackage, ModuleUtilCore.findModuleForPsiElement(psiJavaFile));
         if (!dialog.showAndGet()) {
             return;
         }
 
         // 拼参数
         Map<String, Object> params = getParamMap(psiJavaFile, dialog);
-
         try {
             PsiClass psiClass = createUnitTestFile(dialog, params);
             // 跳转到类上
@@ -78,6 +89,68 @@ public class CreateTestAction extends AnAction {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+    }
+
+    /**
+     * 只创建测试方法
+     *
+     * @param project     project
+     * @param psiJavaFile psiJavaFile
+     * @param editor      editor
+     * @return {@link boolean}
+     */
+    private boolean createTestMethodOnly(Project project, PsiJavaFile psiJavaFile, Editor editor) {
+        PsiElement referenceAt = psiJavaFile.findElementAt(editor.getCaretModel().getOffset());
+        PsiClass selectedClass = Objects.requireNonNull(PsiTreeUtil.getContextOfType(referenceAt, PsiClass.class));
+        String testClassName = CreateTestDialog.suggestTestClassName(selectedClass);
+
+        // 判断光标位置是否在 method 中
+        PsiMethod selectedMethod = PsiTreeUtil.getContextOfType(referenceAt, PsiMethod.class);
+        if (Objects.isNull(selectedMethod)) {
+            return false;
+        }
+        // 判断测试文件夹是否存在
+        PsiDirectory testDir = PsiTool.findTestPackage(psiJavaFile);
+        if (Objects.isNull(testDir)) {
+            return false;
+        }
+        // 判断是否已经生成过这个类的 UnitTest 文件
+        PsiFile testFile = testDir.findFile(testClassName + ".java");
+        if (Objects.isNull(testFile)) {
+            return false;
+        }
+        // 获取 PsiClass
+        PsiClass[] classes = ((PsiJavaFile)testFile).getClasses();
+        if (classes.length == 0) {
+            return false;
+        }
+
+        String testMethodName = "test" + StringTool.upperFirstChar(selectedMethod.getName());
+        PsiClass testClass = classes[0];
+        Optional<PsiMethod> existMethod = Arrays.stream(testClass.getMethods())
+                .filter(item -> Objects.equals(item.getName(), testMethodName))
+                .findAny();
+        // 如果方法已经存在，直接跳转到方法上
+        if (existMethod.isPresent()) {
+            NavigationUtil.activateFileWithPsiElement(existMethod.get());
+        } else {
+            PsiElementFactory factory = PsiElementFactory.getInstance(project);
+            // 创建一个 test Method 并写入测试类
+            PsiMethod method = factory.createMethod(testMethodName, PsiType.VOID);
+            PsiAnnotation testAnno = factory.createAnnotationFromText("@Test", testClass);
+            method.addBefore(testAnno, method.getFirstChild());
+            WriteCommandAction.writeCommandAction(project).run(() -> testClass.addBefore(method, testClass.getLastChild()));
+            // 写入的 Method 好像并不是传入的，需要重新获取下才可以 navigation 到
+            existMethod = Arrays.stream(testClass.getMethods())
+                    .filter(item -> Objects.equals(item.getName(), testMethodName))
+                    .findAny();
+            if (existMethod.isPresent()) {
+                NavigationUtil.activateFileWithPsiElement(existMethod.get());
+            } else {
+                NavigationUtil.activateFileWithPsiElement(testClass);
+            }
+        }
+        return true;
     }
 
     /**
@@ -94,7 +167,7 @@ public class CreateTestAction extends AnAction {
         CustomFileTemplate template = new CustomFileTemplate("java", "java");
         template.setText(text);
         VirtualFile exists = directory.getVirtualFile().findChild(className + ".java");
-        if (exists != null) {
+        if (Objects.nonNull(exists)) {
             ApplicationManager.getApplication().runWriteAction(() -> {
                 try {
                     exists.delete(this);
@@ -139,8 +212,7 @@ public class CreateTestAction extends AnAction {
         for (PsiMethod psiMethod : methodList) {
             MethodInfo methodInfo = new MethodInfo();
             methodInfo.setMethodName(psiMethod.getName());
-            methodInfo.setMethodNameUp(StringUtils.substring(psiMethod.getName(), 0, 1).toUpperCase() +
-                    StringUtils.substring(psiMethod.getName(), 1));
+            methodInfo.setMethodNameUp(StringTool.upperFirstChar(psiMethod.getName()));
             methods.add(methodInfo);
         }
 

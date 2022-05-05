@@ -39,6 +39,8 @@ public class AnnotationInfo {
      */
     private PsiAnnotation psiAnnotation;
 
+    private AnnotationInfo() {}
+
     /**
      * 获取属性值
      *
@@ -48,8 +50,6 @@ public class AnnotationInfo {
     public String getAttributeValue(String attribute) {
         return attributes.get(attribute);
     }
-
-    private AnnotationInfo() {}
 
     /**
      * 根据 PsiAnnotation 类型创建
@@ -61,7 +61,7 @@ public class AnnotationInfo {
         AnnotationInfo annotationInfo = new AnnotationInfo();
         annotationInfo.setTypeInfo(TypeInfo.fromNameGenericsCanonical(psiAnnotation.getQualifiedName()));
         annotationInfo.setText(psiAnnotation.getText());
-        Map<String, String> attributes = new HashMap<>();
+        Map<String, String> attributes = new HashMap<>(2);
         for (PsiNameValuePair nameValuePair : psiAnnotation.getParameterList().getAttributes()) {
             PsiAnnotationMemberValue value = nameValuePair.getValue();
             if (Objects.isNull(value)) {

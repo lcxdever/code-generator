@@ -5,14 +5,21 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.javadoc.PsiDocToken;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.refactoring.PackageWrapper;
+import com.intellij.refactoring.util.RefactoringUtil;
 import com.roc.generator.model.TypeInfo;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.jps.model.java.JavaSourceRootType;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
@@ -124,5 +131,28 @@ public class PsiTool {
             }
         }
         return false;
+    }
+
+    /**
+     * 获取 java 文件所在模块的测试包文件夹
+     *
+     * @param psiJavaFile psiJavaFile
+     * @return {@link PsiDirectory}
+     */
+    @Nullable
+    public static PsiDirectory findTestPackage(PsiJavaFile psiJavaFile) {
+        Module srcModule = ModuleUtilCore.findModuleForPsiElement(psiJavaFile);
+        if (Objects.isNull(srcModule)) {
+            return null;
+        }
+        PsiManager psiManager = PsiManager.getInstance(psiJavaFile.getProject());
+
+       return ModuleRootManager.getInstance(srcModule).getSourceRoots(JavaSourceRootType.TEST_SOURCE)
+               .stream()
+               .map(e -> RefactoringUtil.findPackageDirectoryInSourceRoot(
+                       new PackageWrapper(psiManager, psiJavaFile.getPackageName()), e))
+               .filter(Objects::nonNull)
+               .findFirst()
+               .orElse(null);
     }
 }

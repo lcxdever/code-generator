@@ -37,4 +37,13 @@ public class StringTool {
         return Arrays.stream(StringUtils.splitByCharacterTypeCamelCase(str)).map(String::toUpperCase).collect(Collectors.joining("_"));
     }
 
+    /**
+     * 大写字符串首字母
+     * @param str str
+     * @return {@link String}
+     */
+    public static String upperFirstChar(String str) {
+        return StringUtils.substring(str, 0, 1).toUpperCase() + StringUtils.substring(str, 1);
+    }
+
 }
