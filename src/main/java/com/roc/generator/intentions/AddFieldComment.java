@@ -53,10 +53,6 @@ public class AddFieldComment extends PsiElementBaseIntentionAction implements In
         if (!(element instanceof PsiJavaToken)) {
             return false;
         }
-        final PsiJavaToken token = (PsiJavaToken) element;
-        if (token.getTokenType() != JavaTokenType.IDENTIFIER) {
-            return false;
-        }
         PsiField field = PsiTreeUtil.getContextOfType(element, PsiField.class);
         if (Objects.isNull(field)) {
             return false;

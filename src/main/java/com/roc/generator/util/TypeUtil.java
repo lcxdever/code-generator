@@ -55,6 +55,8 @@ public class TypeUtil {
         JAVA_BASE_TYPE.put("java.util.Map", new HashMap<>());
         JAVA_BASE_TYPE.put("java.util.HashMap", new HashMap<>());
         JAVA_BASE_TYPE.put("com.alibaba.fastjson.JSONObject", new HashMap<>());
+        // 无界通配符也算在里面
+        JAVA_BASE_TYPE.put("?", new HashMap<>());
 
         PRIMITIVE_BOX_MAP = new HashMap<>();
         PRIMITIVE_BOX_MAP.put("byte", "java.lang.Byte");
