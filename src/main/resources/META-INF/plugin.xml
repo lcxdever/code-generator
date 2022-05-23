@@ -109,6 +109,11 @@
 
     <change-notes>
         <![CDATA[
+            <h3>1.13</h3>
+            <ul>
+                <li>optimize the generation of Markdown Doc</li>
+                <li>优化了字段注释生成的判断条件，优化了文档生成时候对无界通配符的支持</li>
+            </ul>
             <h3>1.12</h3>
             <ul>
                 <li>optimize the generation of UnitTest, append test method generation for existing unit test classes</li>
