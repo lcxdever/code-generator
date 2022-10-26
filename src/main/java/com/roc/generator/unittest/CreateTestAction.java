@@ -7,6 +7,7 @@ import com.intellij.ide.fileTemplates.impl.CustomFileTemplate;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
@@ -42,7 +43,15 @@ public class CreateTestAction extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        PsiTool.setNormalClassVisible(e);
+        Presentation presentation = e.getPresentation();
+        PsiClass psiClass = PsiTool.getSelectClass(e);
+        if (Objects.isNull(psiClass)) {
+            presentation.setEnabledAndVisible(false);
+            return;
+        }
+        if (psiClass.isInterface() || psiClass.isAnnotationType()) {
+            presentation.setEnabledAndVisible(false);
+        }
     }
 
     @Override

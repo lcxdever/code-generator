@@ -38,11 +38,34 @@ public class FieldInfoUtil {
      */
     public static List<FieldInfo> getFieldInfoFromPsiClass(PsiClass psiClass, FieldFilter fieldFilter) {
         List<FieldInfo> fields = new ArrayList<>();
-        for (PsiField psiField : psiClass.getAllFields()) {
+        for (PsiField psiField : getCustomPsiClassAllFields(psiClass)) {
             if (fieldFilter.needFilter(psiField)) {
                 continue;
             }
             fields.add(FieldInfo.fromPsiField(psiField));
+        }
+        return fields;
+    }
+
+    /**
+     * 获取 PsiClass 的所有字段，基类的字段将排在前面
+     *
+     * @param psiClass psiClass
+     * @return {@link PsiField[]}
+     */
+    public static PsiField[] getCustomPsiClassAllFields(PsiClass psiClass) {
+        PsiField[] fields = psiClass.getAllFields();
+        String psiClassName = psiClass.getName();
+        int removeIndex = 0;
+        int removeLen = 0;
+        for (int i = 0; i < fields.length; i++) {
+            PsiField tmp = fields[i];
+            if (!Objects.equals(psiClassName, Objects.requireNonNull(tmp.getContainingClass()).getName())) {
+                System.arraycopy(fields, removeIndex, fields, removeIndex + 1, removeLen);
+                fields[removeIndex++] = tmp;
+            } else {
+                removeLen++;
+            }
         }
         return fields;
     }

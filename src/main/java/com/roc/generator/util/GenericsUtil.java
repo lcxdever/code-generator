@@ -29,7 +29,7 @@ public class GenericsUtil {
         }
         // 数组类型
         if (fieldType instanceof PsiArrayType) {
-            PsiType typeTmp = fieldType.getDeepComponentType();
+            PsiType typeTmp = ((PsiArrayType) fieldType).getComponentType();
             StringBuilder suffix = new StringBuilder("[]");
             while (typeTmp instanceof PsiArrayType) {
                 typeTmp = typeTmp.getDeepComponentType();
@@ -45,7 +45,12 @@ public class GenericsUtil {
             return genericsHelper.getRelType(fieldType).getPresentableText();
         }
         // 泛型类型
-        return psiClassType.getClassName() +
-                "<" +Arrays.stream(types).map(genericsHelper::getRelType).map(PsiType::getPresentableText).collect(Collectors.joining(", ")) + ">";
+        return psiClassType.getClassName()
+                + "<"
+                + Arrays.stream(types)
+                        .map(genericsHelper::getRelType)
+                        .map(PsiType::getPresentableText)
+                        .collect(Collectors.joining(", "))
+                + ">";
     }
 }

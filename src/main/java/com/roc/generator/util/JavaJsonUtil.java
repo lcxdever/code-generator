@@ -51,7 +51,7 @@ public class JavaJsonUtil {
                 continue;
             }
             FieldInfo fieldInfo = FieldInfo.fromPsiField(field);
-            String fieldClassNameFull = fieldInfo.getTypeInfo().getNameCanonical();
+            String fieldClassNameFull = fieldInfo.getTypeInfo().getNameGenericsCanonical();
             String fieldName = fieldInfo.getFieldName();
             // java 基础类型
             if (TypeUtil.isJavaBaseType(fieldClassNameFull)) {
@@ -81,7 +81,7 @@ public class JavaJsonUtil {
             psiType = parentGenerics.getRelType(psiType);
         }
         TypeInfo typeInfo = TypeInfo.fromPsiType(psiType);
-        String nameFull = typeInfo.getNameCanonical();
+        String nameFull = typeInfo.getNameGenericsCanonical();
         // 基础类型，直接返回
         if (TypeUtil.isJavaBaseType(nameFull)) {
             return TypeUtil.getDefaultValue(nameFull);
@@ -121,7 +121,7 @@ public class JavaJsonUtil {
             }
             String fieldName = field.getName();
             FieldInfo fieldInfo = FieldInfo.fromPsiField(field);
-            String fieldTypeNameCanonical = fieldInfo.getTypeInfo().getNameCanonical();
+            String fieldTypeNameCanonical = fieldInfo.getTypeInfo().getNameGenericsCanonical();
 
             // java 基础类型
             if (TypeUtil.isJavaBaseType(fieldTypeNameCanonical)) {

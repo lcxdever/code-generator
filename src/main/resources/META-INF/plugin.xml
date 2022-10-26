@@ -109,6 +109,16 @@
 
     <change-notes>
         <![CDATA[
+            <h3>1.15</h3>
+            <ul>
+                <li>fix bug, when generation of Markdown Doc contains array type </li>
+                <li>修复了生成 markdown 文档时候对数组类型的异常</li>
+            </ul>
+            <h3>1.14</h3>
+            <ul>
+                <li>optimize add UnitTest generation to Enum, optimize the generation of Markdown Doc, let the fields of abstract class in front</li>
+                <li>优化了枚举类型生成 UnitTest,优化了生成 markdown 文档时候将基类字段排在前面</li>
+            </ul>
             <h3>1.13</h3>
             <ul>
                 <li>optimize the generation of Markdown Doc</li>
