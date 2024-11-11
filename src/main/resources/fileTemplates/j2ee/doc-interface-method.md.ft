@@ -1,5 +1,5 @@
 # 1 接口说明
-**接口用途：**${METHOD_COMMENT_SIMPLE}
+**接口用途：** ${METHOD_COMMENT_SIMPLE}
 ```java
 class:
 
@@ -29,7 +29,7 @@ ${METHOD_TEXT_FULL}
 $!PARAMETER_EG
 ```
 #[[##]]# 2.3 返回参数
-**返回数据类型：**$!RETURN_TYPE_NAME_GENERICS_SIMPLE
+**返回数据类型：** $!RETURN_TYPE_NAME_GENERICS_SIMPLE
 #foreach($param in ${RETURN_TYPE_DESCRIBE})
 #[[###]]# ${param.classNameSimple}
 |**字段名称**|**类型**|**是否可空**|**描述/说明**|

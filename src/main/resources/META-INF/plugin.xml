@@ -109,6 +109,11 @@
 
     <change-notes>
         <![CDATA[
+            <h3>1.16</h3>
+            <ul>
+                <li>optimize DINGDING document</li>
+                <li>优化 markdown 文档生成支持钉钉文档格式</li>
+            </ul>
             <h3>1.15</h3>
             <ul>
                 <li>fix bug, when generation of Markdown Doc contains array type </li>
@@ -177,7 +182,7 @@
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.modules.java</depends>
+    <depends>com.intellij.java</depends>
 
     <extensionPoints>
         <extensionPoint name="testFramework" interface="com.roc.generator.unittest.TestFramework" />

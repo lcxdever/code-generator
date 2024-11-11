@@ -72,7 +72,8 @@ public class MdDocToolWindow {
             }
 
             @Override
-            public void edit(@NotNull FieldValueRow browser, @NotNull Function<FieldValueRow, FieldValueRow> mutator, boolean isAdd) {
+            public void edit(@NotNull FieldValueRow item, @NotNull Function<? super FieldValueRow, ? extends FieldValueRow> mutator, boolean isAdd) {
+
             }
 
             @Override

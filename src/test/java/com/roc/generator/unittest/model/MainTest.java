@@ -1,6 +1,5 @@
 package com.roc.generator.unittest.model;
 
-import com.intellij.testFramework.fixtures.*;
 import com.roc.generator.javadoc.model.ControllerMethodMd;
 import com.roc.generator.util.ReflectTool;
 import com.roc.generator.util.StringTool;
@@ -43,16 +42,5 @@ public class MainTest {
 
     @Test
     public void testPlugin() throws Exception {
-        TestFixtureBuilder<IdeaProjectTestFixture> projectBuilder =
-                IdeaTestFixtureFactory.getFixtureFactory().createFixtureBuilder("code-generator");
-
-        // Repeat the following line for each module
-//        JavaModuleFixtureBuilder moduleFixtureBuilder =
-//                projectBuilder.addModule(JavaModuleFixtureBuilderImpl.class);
-
-        JavaCodeInsightTestFixture myFixture = JavaTestFixtureFactory.getFixtureFactory()
-                .createCodeInsightFixture(projectBuilder.getFixture());
-        myFixture.setUp();
-        System.out.println(myFixture.getProject());
     }
 }

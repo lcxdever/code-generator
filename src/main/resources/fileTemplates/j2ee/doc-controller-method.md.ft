@@ -2,8 +2,8 @@
 #[[##]]# 1.1 接口用途
 ${METHOD_COMMENT_SIMPLE}
 #[[##]]# 1.2 接口地址
-**接口名：**${REQUEST_URI}
-**域名：**参见通用信息说明
+**接口名：** ${REQUEST_URI}
+**域名：** 参见通用信息说明
 #[[##]]# 1.3 请求方式
 HTTP ${REQUEST_METHOD} ${REQUEST_TYPE}
 # 2 接口参数
@@ -26,7 +26,7 @@ HTTP ${REQUEST_METHOD} ${REQUEST_TYPE}
 $!PARAMETER_EG
 ```
 #[[##]]# 2.3 返回参数
-**返回数据类型：**$!RETURN_TYPE_NAME_GENERICS_SIMPLE
+**返回数据类型：** $!RETURN_TYPE_NAME_GENERICS_SIMPLE
 #foreach($param in ${RETURN_TYPE_DESCRIBE})
 #[[###]]# ${param.classNameSimple}
 |**字段名称**|**类型**|**是否可空**|**描述/说明**|

@@ -248,7 +248,7 @@ public class CreateTestDialog extends DialogWrapper {
         new AnAction() {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
-                myTargetPackageField.getButton().doClick();
+//                myTargetPackageField.getButton().doClick();
             }
         }.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.SHIFT_DOWN_MASK)),
                 myTargetPackageField.getChildComponent());

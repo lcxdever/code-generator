@@ -171,7 +171,7 @@ public class CreateTestAction extends AnAction {
     private PsiClass createUnitTestFile(CreateTestDialog dialog, Map<String, Object> params) throws Exception {
         PsiDirectory directory = dialog.getTargetDirectory();
         String className = dialog.getClassName();
-        String text = ResourceUtil.loadText(ResourceUtil.getResource(this.getClass().getClassLoader(), "template", "unit-test.vm"));
+        String text = ResourceUtil.loadText(ResourceUtil.getResourceAsStream(this.getClass().getClassLoader(), "template", "unit-test.vm"));
 
         CustomFileTemplate template = new CustomFileTemplate("java", "java");
         template.setText(text);

@@ -57,7 +57,8 @@ public class MdUtil {
      * @return {@link java.lang.String}
      */
     public static String spChartReplace(String str) {
-        return StringUtils.replace(StringUtils.replace(str, "<", "&lt;"), ">", "&gt;");
+//        return StringUtils.replace(StringUtils.replace(str, "<", "&lt;"), ">", "&gt;");
+        return StringUtils.replace(StringUtils.replace(str, "<", " < "), ">", " > ");
     }
 
     /**
